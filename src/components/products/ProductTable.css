@@ -1,0 +1,233 @@
+.products-table-container {
+  width: 100%;
+
+  background: white;
+
+  border: 1px solid #e5e7eb;
+
+  border-radius: 10px;
+
+  overflow-x: auto;
+}
+
+.products-table {
+  width: 100%;
+
+  border-collapse: collapse;
+
+  min-width: 800px;
+}
+
+.products-table th {
+  padding: 14px 16px;
+
+  text-align: left;
+
+  font-size: 11px;
+
+  text-transform: uppercase;
+
+  letter-spacing: 0.04em;
+
+  color: #9ca3af;
+
+  background: #fafafa;
+
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.products-table td {
+  padding: 14px 16px;
+
+  border-bottom: 1px solid #f0f0f0;
+
+  font-size: 13px;
+
+  color: #374151;
+}
+
+.products-table tbody tr:last-child td {
+  border-bottom: 0;
+}
+
+.products-table tbody tr:hover {
+  background: #fafafa;
+}
+
+.product-name {
+  display: flex;
+
+  align-items: center;
+
+  gap: 12px;
+}
+
+.product-image {
+  width: 46px;
+  height: 46px;
+
+  border-radius: 8px;
+
+  background: #f3f4f6;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  overflow: hidden;
+
+  flex-shrink: 0;
+}
+
+.product-image img {
+  width: 100%;
+  height: 100%;
+
+  object-fit: cover;
+}
+
+.product-name strong {
+  display: block;
+
+  color: #111827;
+
+  font-size: 13px;
+}
+
+.product-name span {
+  display: block;
+
+  margin-top: 3px;
+
+  color: #9ca3af;
+
+  font-size: 10px;
+}
+
+.type-badge {
+  display: inline-flex;
+
+  padding: 5px 9px;
+
+  border-radius: 5px;
+
+  font-size: 11px;
+
+  font-weight: 600;
+}
+
+.type-simple {
+  background: #f3f4f6;
+  color: #374151;
+}
+
+.type-variable {
+  background: #eef2ff;
+  color: #4338ca;
+}
+
+.type-bundle {
+  background: #fef3c7;
+  color: #92400e;
+}
+
+.stock {
+  font-weight: 600;
+
+  color: #166534;
+}
+
+.stock-empty {
+  color: #b91c1c;
+}
+
+.status {
+  display: inline-flex;
+
+  align-items: center;
+
+  gap: 6px;
+
+  font-size: 11px;
+
+  font-weight: 600;
+}
+
+.status > span {
+  width: 7px;
+  height: 7px;
+
+  border-radius: 50%;
+}
+
+.status.published {
+  color: #15803d;
+}
+
+.status.published > span {
+  background: #22c55e;
+}
+
+.status.unpublished {
+  color: #6b7280;
+}
+
+.status.unpublished > span {
+  background: #9ca3af;
+}
+
+.product-menu {
+  width: 32px;
+  height: 32px;
+
+  border: 0;
+
+  border-radius: 6px;
+
+  background: transparent;
+
+  font-size: 18px;
+
+  color: #6b7280;
+}
+
+.product-menu:hover {
+  background: #f3f4f6;
+}
+
+.empty-products {
+  min-height: 300px;
+
+  background: white;
+
+  border: 1px solid #e5e7eb;
+
+  border-radius: 10px;
+
+  display: flex;
+
+  flex-direction: column;
+
+  align-items: center;
+  justify-content: center;
+
+  text-align: center;
+}
+
+.empty-icon {
+  font-size: 35px;
+}
+
+.empty-products h3 {
+  margin: 12px 0 5px;
+
+  font-size: 15px;
+}
+
+.empty-products p {
+  margin: 0;
+
+  color: #9ca3af;
+
+  font-size: 12px;
+}

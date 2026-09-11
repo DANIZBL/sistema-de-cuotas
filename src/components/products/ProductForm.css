@@ -1,0 +1,497 @@
+.product-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.form-section {
+  padding-bottom: 20px;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.form-section:last-of-type {
+  border-bottom: 0;
+  padding-bottom: 0;
+}
+
+.form-section-title {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 15px;
+  margin-bottom: 18px;
+}
+
+.form-section-title h3 {
+  margin: 0;
+  color: #111827;
+  font-size: 14px;
+}
+
+.form-section-title p {
+  margin: 4px 0 0;
+  color: #9ca3af;
+  font-size: 11px;
+  line-height: 1.4;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+
+.form-group + .form-group {
+  margin-top: 15px;
+}
+
+.form-group label {
+  color: #374151;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.form-group small {
+  color: #9ca3af;
+  font-size: 10px;
+  line-height: 1.5;
+}
+
+.form-group input,
+.form-group textarea,
+.form-group select,
+.product-form > .form-section select {
+  width: 100%;
+  border: 1px solid #d1d5db;
+  border-radius: 7px;
+  outline: none;
+  background: white;
+  color: #2771d3;
+  font-size: 13px;
+  transition: border-color 0.2s;
+}
+
+.form-group input,
+.form-group select,
+.product-form > .form-section select {
+  height: 42px;
+  padding: 0 12px;
+}
+
+.form-group textarea {
+  padding: 11px 12px;
+  resize: vertical;
+  min-height: 95px;
+  line-height: 1.5;
+}
+
+.form-group input:focus,
+.form-group textarea:focus,
+.form-group select:focus,
+.product-form > .form-section select:focus {
+  border-color: #2771d3;
+}
+
+.form-group input:disabled,
+.form-group textarea:disabled,
+.form-group select:disabled,
+.product-form > .form-section select:disabled {
+  background: #f9fafb;
+  color: #9ca3af;
+  cursor: not-allowed;
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+}
+
+.form-grid .form-group + .form-group {
+  margin-top: 0;
+}
+
+/* =========================
+   PUBLICACIÓN
+========================= */
+
+.publish-toggle {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  cursor: pointer;
+}
+
+.publish-toggle input {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.toggle-slider {
+  position: relative;
+  width: 42px;
+  height: 23px;
+  flex-shrink: 0;
+  border-radius: 20px;
+  background: #d1d5db;
+  transition: 0.2s;
+}
+
+.toggle-slider::after {
+  content: "";
+  position: absolute;
+  width: 17px;
+  height: 17px;
+  top: 3px;
+  left: 3px;
+  border-radius: 50%;
+  background: white;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+  transition: 0.2s;
+}
+
+.publish-toggle input:checked + .toggle-slider {
+  background: #2771d3;
+}
+
+.publish-toggle input:checked + .toggle-slider::after {
+  transform: translateX(19px);
+}
+
+.publish-toggle strong {
+  display: block;
+  color: #374151;
+  font-size: 12px;
+}
+
+.publish-toggle small {
+  display: block;
+  margin-top: 3px;
+  color: #9ca3af;
+  font-size: 10px;
+}
+
+/* =========================
+   IMÁGENES
+========================= */
+
+.images-form {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.image-input {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.image-input input {
+  flex: 1;
+  height: 40px;
+  padding: 0 11px;
+  border: 1px solid #d1d5db;
+  border-radius: 7px;
+  outline: none;
+  font-size: 12px;
+}
+
+.image-input input:focus {
+  border-color: #2771d3;
+}
+
+.image-input button {
+  width: 34px;
+  height: 34px;
+  flex-shrink: 0;
+  border: 0;
+  border-radius: 6px;
+  background: #fef2f2;
+  color: #b91c1c;
+  font-size: 19px;
+}
+
+.image-input button:hover {
+  background: #fee2e2;
+}
+
+.add-image-button,
+.add-variant-button {
+  flex-shrink: 0;
+  padding: 8px 12px;
+  border: 1px solid #d1d5db;
+  border-radius: 7px;
+  background: white;
+  color: #374151;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.add-image-button:hover,
+.add-variant-button:hover {
+  background: #f9fafb;
+  border-color: #9ca3af;
+}
+
+/* =========================
+   VARIANTES
+========================= */
+
+.variants-section {
+  border-bottom: 0;
+  padding-bottom: 0;
+}
+
+.variants-list {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.variant-card {
+  padding: 17px;
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+  background: #fafafa;
+}
+
+.variant-card-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 15px;
+  padding-bottom: 15px;
+  margin-bottom: 15px;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.variant-number {
+  display: block;
+  color: #111827;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.variant-card-header p {
+  margin: 3px 0 0;
+  color: #9ca3af;
+  font-size: 10px;
+}
+
+.remove-variant-button {
+  padding: 7px 10px;
+  border: 1px solid #fecaca;
+  border-radius: 6px;
+  background: #fff;
+  color: #b91c1c;
+  font-size: 10px;
+  font-weight: 600;
+}
+
+.remove-variant-button:hover {
+  background: #fef2f2;
+}
+
+.variant-subtitle {
+  margin-bottom: 10px;
+  color: #374151;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.attribute-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr auto;
+  align-items: end;
+  gap: 10px;
+  margin-bottom: 9px;
+}
+
+.attribute-row .form-group + .form-group {
+  margin-top: 0;
+}
+
+.remove-attribute-button {
+  width: 32px;
+  height: 32px;
+  margin-bottom: 4px;
+  border: 0;
+  border-radius: 6px;
+  background: #fef2f2;
+  color: #b91c1c;
+  font-size: 18px;
+}
+
+.remove-attribute-button:hover {
+  background: #fee2e2;
+}
+
+.add-attribute-button {
+  margin-top: 2px;
+  padding: 7px 10px;
+  border: 0;
+  background: transparent;
+  color: #374151;
+  font-size: 10px;
+  font-weight: 600;
+}
+
+.add-attribute-button:hover {
+  text-decoration: underline;
+}
+
+.variant-commercial {
+  margin-top: 18px;
+  padding-top: 17px;
+  border-top: 1px solid #e5e7eb;
+}
+
+.variant-price-grid {
+  grid-template-columns: repeat(3, 1fr);
+}
+
+/* =========================
+   BOTONES FINALES
+========================= */
+
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  padding-top: 5px;
+}
+
+.cancel-button,
+.submit-button {
+  min-width: 110px;
+  height: 40px;
+  padding: 0 15px;
+  border-radius: 7px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.cancel-button {
+  border: 1px solid #d1d5db;
+  background: white;
+  color: #374151;
+}
+
+.cancel-button:hover {
+  background: #f9fafb;
+}
+
+.submit-button {
+  border: 0;
+  background: #2771d3;
+  color: white;
+}
+
+.submit-button:hover {
+  background: #374151;
+}
+
+/* =========================
+   ERROR
+========================= */
+
+.form-error {
+  padding: 12px 14px;
+  border: 1px solid #fecaca;
+  border-radius: 8px;
+  background: #fef2f2;
+  color: #991b1b;
+}
+
+.form-error strong {
+  display: block;
+  font-size: 12px;
+}
+
+.form-error span {
+  display: block;
+  margin-top: 4px;
+  font-size: 11px;
+  line-height: 1.5;
+}
+
+/* =========================
+   DISABLED
+========================= */
+
+.submit-button:disabled,
+.cancel-button:disabled,
+.add-image-button:disabled,
+.add-variant-button:disabled,
+.add-attribute-button:disabled,
+.remove-variant-button:disabled,
+.remove-attribute-button:disabled,
+.image-input button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media (max-width: 650px) {
+  .form-grid,
+  .variant-price-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .attribute-row {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .remove-attribute-button {
+    grid-column: 2;
+    justify-self: end;
+    margin-top: -5px;
+  }
+
+  .form-section-title {
+    flex-direction: column;
+  }
+
+  .add-image-button,
+  .add-variant-button {
+    width: 100%;
+  }
+}
+
+@media (max-width: 450px) {
+  .variant-card {
+    padding: 13px;
+  }
+
+  .attribute-row {
+    grid-template-columns: 1fr;
+  }
+
+  .remove-attribute-button {
+    grid-column: auto;
+    justify-self: start;
+    margin-top: 0;
+  }
+
+  .variant-card-header {
+    flex-direction: column;
+  }
+
+  .remove-variant-button {
+    width: 100%;
+  }
+
+  .form-actions {
+    flex-direction: column-reverse;
+  }
+
+  .cancel-button,
+  .submit-button {
+    width: 100%;
+  }
+}
