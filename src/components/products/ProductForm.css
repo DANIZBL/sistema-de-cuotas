@@ -495,3 +495,103 @@
     width: 100%;
   }
 }
+
+/* =========================
+   BUNDLES / COMBOS
+========================= */
+
+.bundle-price-grid {
+  grid-template-columns: 1fr;
+  max-width: 220px;
+}
+
+.bundle-section {
+  border-bottom: 0;
+}
+
+.bundle-components {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.bundle-component-card {
+  padding: 17px;
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+  background: #fafafa;
+}
+
+.bundle-component-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 15px;
+  padding-bottom: 15px;
+  margin-bottom: 15px;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.bundle-component-header p {
+  margin: 3px 0 0;
+  color: #9ca3af;
+  font-size: 10px;
+}
+
+.bundle-component-grid {
+  display: grid;
+  grid-template-columns: 1.4fr 1.4fr 0.6fr;
+  gap: 12px;
+}
+
+.bundle-component-grid .form-group {
+  margin-top: 0;
+}
+
+.bundle-component-grid select,
+.bundle-component-grid input {
+  width: 100%;
+  height: 42px;
+  padding: 0 12px;
+  border: 1px solid #d1d5db;
+  border-radius: 7px;
+  outline: none;
+  background: white;
+  color: #111827;
+  font-size: 12px;
+}
+
+.bundle-component-grid select:focus,
+.bundle-component-grid input:focus {
+  border-color: #111827;
+}
+
+.bundle-component-grid select:disabled,
+.bundle-component-grid input:disabled {
+  background: #f9fafb;
+  color: #9ca3af;
+  cursor: not-allowed;
+}
+
+.bundle-loading,
+.bundle-empty {
+  padding: 20px;
+  border: 1px dashed #d1d5db;
+  border-radius: 8px;
+  text-align: center;
+  color: #9ca3af;
+  font-size: 12px;
+  margin-bottom: 14px;
+}
+
+.bundle-empty {
+  color: #b91c1c;
+  background: #fef2f2;
+  border-color: #fecaca;
+}
+
+@media (max-width: 650px) {
+  .bundle-component-grid {
+    grid-template-columns: 1fr;
+  }
+}

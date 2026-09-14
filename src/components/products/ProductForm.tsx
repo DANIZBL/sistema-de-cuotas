@@ -1,23 +1,74 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
-import { createProduct } from "../../services/productService";
+import { createProduct, getProducts } from "../../services/productService";
+
+import type {
+  CreateBundleComponent,
+  CreateBundleProduct,
+  CreateSimpleProduct,
+  CreateVariableProduct,
+  Product,
+  SKU,
+} from "../../types/product";
 
 import "./ProductForm.css";
 
-const createEmptyAttribute = () => ({
+type ProductFormType = "simple" | "variable" | "bundle";
+
+interface AttributeForm {
+  name: string;
+  value: string;
+}
+
+interface VariableForm {
+  attributes: AttributeForm[];
+  price: string;
+  discountedPrice: string;
+  stock: string;
+}
+
+interface BundleComponentForm {
+  skuId: string;
+  quantity: string;
+}
+
+interface ProductFormState {
+  type: ProductFormType;
+  name: string;
+  description: string;
+  price: string;
+  discountedPrice: string;
+  stock: string;
+  isPublished: boolean;
+  images: string[];
+  variants: VariableForm[];
+  components: BundleComponentForm[];
+}
+
+interface ProductFormProps {
+  onSuccess: () => void;
+  onCancel: () => void;
+}
+
+const createEmptyAttribute = (): AttributeForm => ({
   name: "",
   value: "",
 });
 
-const createEmptyVariant = () => ({
+const createEmptyVariant = (): VariableForm => ({
   attributes: [createEmptyAttribute()],
   price: "",
   discountedPrice: "",
   stock: "",
 });
 
-function ProductForm({ onSuccess, onCancel }) {
-  const [form, setForm] = useState({
+const createEmptyComponent = (): BundleComponentForm => ({
+  skuId: "",
+  quantity: "1",
+});
+
+function ProductForm({ onSuccess, onCancel }: ProductFormProps) {
+  const [form, setForm] = useState<ProductFormState>({
     type: "simple",
     name: "",
     description: "",
@@ -27,12 +78,37 @@ function ProductForm({ onSuccess, onCancel }) {
     isPublished: true,
     images: [""],
     variants: [createEmptyVariant()],
+    components: [createEmptyComponent()],
   });
+
+  const [products, setProducts] = useState<Product[]>([]);
+
+  const [loadingProducts, setLoadingProducts] = useState(false);
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
-  function handleChange(event) {
+  useEffect(() => {
+    loadProducts();
+  }, []);
+
+  async function loadProducts() {
+    try {
+      setLoadingProducts(true);
+
+      const data = await getProducts();
+
+      setProducts(data);
+    } catch (error) {
+      console.error("Error al cargar productos:", error);
+    } finally {
+      setLoadingProducts(false);
+    }
+  }
+
+  function handleChange(
+    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) {
     const { name, value } = event.target;
 
     setForm((current) => ({
@@ -41,16 +117,22 @@ function ProductForm({ onSuccess, onCancel }) {
     }));
   }
 
-  function handleTypeChange(event) {
-    const type = event.target.value;
+  function handleTypeChange(event: React.ChangeEvent<HTMLSelectElement>) {
+    const type = event.target.value as ProductFormType;
 
     setForm((current) => ({
       ...current,
       type,
     }));
+
+    setError("");
   }
 
-  function handleImageChange(index, value) {
+  /* =========================
+     IMÁGENES
+  ========================= */
+
+  function handleImageChange(index: number, value: string) {
     setForm((current) => {
       const images = [...current.images];
 
@@ -70,14 +152,22 @@ function ProductForm({ onSuccess, onCancel }) {
     }));
   }
 
-  function removeImage(index) {
+  function removeImage(index: number) {
     setForm((current) => ({
       ...current,
       images: current.images.filter((_, imageIndex) => imageIndex !== index),
     }));
   }
 
-  function updateVariant(variantIndex, field, value) {
+  /* =========================
+     VARIANTES
+  ========================= */
+
+  function updateVariant(
+    variantIndex: number,
+    field: keyof VariableForm,
+    value: string
+  ) {
     setForm((current) => {
       const variants = [...current.variants];
 
@@ -100,7 +190,7 @@ function ProductForm({ onSuccess, onCancel }) {
     }));
   }
 
-  function removeVariant(index) {
+  function removeVariant(index: number) {
     setForm((current) => {
       if (current.variants.length === 1) {
         return current;
@@ -115,7 +205,12 @@ function ProductForm({ onSuccess, onCancel }) {
     });
   }
 
-  function updateAttribute(variantIndex, attributeIndex, field, value) {
+  function updateAttribute(
+    variantIndex: number,
+    attributeIndex: number,
+    field: keyof AttributeForm,
+    value: string
+  ) {
     setForm((current) => {
       const variants = [...current.variants];
 
@@ -140,7 +235,7 @@ function ProductForm({ onSuccess, onCancel }) {
     });
   }
 
-  function addAttribute(variantIndex) {
+  function addAttribute(variantIndex: number) {
     setForm((current) => {
       const variants = [...current.variants];
 
@@ -159,7 +254,7 @@ function ProductForm({ onSuccess, onCancel }) {
     });
   }
 
-  function removeAttribute(variantIndex, attributeIndex) {
+  function removeAttribute(variantIndex: number, attributeIndex: number) {
     setForm((current) => {
       const variant = current.variants[variantIndex];
 
@@ -183,7 +278,92 @@ function ProductForm({ onSuccess, onCancel }) {
     });
   }
 
-  function validateSimple() {
+  /* =========================
+     COMPONENTES DEL COMBO
+  ========================= */
+
+  function updateComponent(
+    componentIndex: number,
+    field: keyof BundleComponentForm,
+    value: string
+  ) {
+    setForm((current) => {
+      const components = [...current.components];
+
+      components[componentIndex] = {
+        ...components[componentIndex],
+        [field]: value,
+      };
+
+      return {
+        ...current,
+        components,
+      };
+    });
+  }
+
+  function addComponent() {
+    setForm((current) => ({
+      ...current,
+      components: [...current.components, createEmptyComponent()],
+    }));
+  }
+
+  function removeComponent(componentIndex: number) {
+    setForm((current) => {
+      if (current.components.length === 1) {
+        return current;
+      }
+
+      return {
+        ...current,
+        components: current.components.filter(
+          (_, index) => index !== componentIndex
+        ),
+      };
+    });
+  }
+
+  function getProductForSku(skuId: string): Product | undefined {
+    return products.find((product) =>
+      product.skus.some((sku) => sku.id === skuId)
+    );
+  }
+
+  function getSkusForProduct(productId: string): SKU[] {
+    return products.find((product) => product.id === productId)?.skus || [];
+  }
+
+  function getComponentProductId(skuId: string): string {
+    return getProductForSku(skuId)?.id || "";
+  }
+
+  function handleComponentProductChange(
+    componentIndex: number,
+    productId: string
+  ) {
+    const skus = getSkusForProduct(productId);
+
+    setForm((current) => {
+      const components = [...current.components];
+
+      components[componentIndex] = {
+        ...components[componentIndex],
+        skuId: skus[0]?.id || "",
+      };
+
+      return {
+        ...current,
+        components,
+      };
+    });
+  }
+
+  /* =========================
+     VALIDACIONES
+  ========================= */
+
+  function validateSimple(): string {
     if (!form.name.trim()) {
       return "El nombre del producto es obligatorio.";
     }
@@ -211,7 +391,7 @@ function ProductForm({ onSuccess, onCancel }) {
     return "";
   }
 
-  function validateVariable() {
+  function validateVariable(): string {
     if (!form.name.trim()) {
       return "El nombre del producto es obligatorio.";
     }
@@ -286,8 +466,44 @@ function ProductForm({ onSuccess, onCancel }) {
     return "";
   }
 
-  function buildSimplePayload() {
-    const productData = {
+  function validateBundle(): string {
+    if (!form.name.trim()) {
+      return "El nombre del combo es obligatorio.";
+    }
+
+    if (form.price === "") {
+      return "El precio del combo es obligatorio.";
+    }
+
+    if (Number(form.price) < 0) {
+      return "El precio no puede ser negativo.";
+    }
+
+    if (!form.components.length) {
+      return "El combo debe tener al menos un componente.";
+    }
+
+    for (let index = 0; index < form.components.length; index++) {
+      const component = form.components[index];
+
+      if (!component.skuId) {
+        return `Seleccioná un SKU para el componente ${index + 1}.`;
+      }
+
+      if (component.quantity === "" || Number(component.quantity) <= 0) {
+        return `La cantidad del componente ${index + 1} debe ser mayor a 0.`;
+      }
+    }
+
+    return "";
+  }
+
+  /* =========================
+     PAYLOADS
+  ========================= */
+
+  function buildSimplePayload(): CreateSimpleProduct {
+    const productData: CreateSimpleProduct = {
       name: form.name.trim(),
       description: form.description.trim(),
       price: Number(form.price),
@@ -303,34 +519,32 @@ function ProductForm({ onSuccess, onCancel }) {
     return productData;
   }
 
-  function buildVariablePayload() {
+  function buildVariablePayload(): CreateVariableProduct {
     return {
       name: form.name.trim(),
       description: form.description.trim(),
-
-      // El backend también espera estos campos
-      // en el nivel principal para productos variables.
       price: Number(form.variants[0].price) || 0,
       stock: 0,
-
       isPublished: form.isPublished,
-
       variants: form.variants.map((variant) => {
         const payloadVariant = {
           variant: variant.attributes.map((attribute) => ({
             name: attribute.name.trim(),
             value: attribute.value.trim(),
           })),
-
           stock: Number(variant.stock),
         };
 
         if (variant.price !== "") {
-          payloadVariant.price = Number(variant.price);
-        }
-
-        if (variant.discountedPrice !== "") {
-          payloadVariant.discountedPrice = Number(variant.discountedPrice);
+          return {
+            ...payloadVariant,
+            price: Number(variant.price),
+            ...(variant.discountedPrice !== ""
+              ? {
+                  discountedPrice: Number(variant.discountedPrice),
+                }
+              : {}),
+          };
         }
 
         return payloadVariant;
@@ -338,13 +552,39 @@ function ProductForm({ onSuccess, onCancel }) {
     };
   }
 
-  async function handleSubmit(event) {
+  function buildBundlePayload(): CreateBundleProduct {
+    const components: CreateBundleComponent[] = form.components.map(
+      (component) => ({
+        skuId: component.skuId,
+        quantity: Number(component.quantity),
+      })
+    );
+
+    return {
+      name: form.name.trim(),
+      description: form.description.trim(),
+      price: Number(form.price),
+      isPublished: form.isPublished,
+      components,
+    };
+  }
+  /* =========================
+     SUBMIT
+  ========================= */
+  async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
 
     setError("");
 
-    const validationError =
-      form.type === "simple" ? validateSimple() : validateVariable();
+    let validationError = "";
+
+    if (form.type === "simple") {
+      validationError = validateSimple();
+    } else if (form.type === "variable") {
+      validationError = validateVariable();
+    } else {
+      validationError = validateBundle();
+    }
 
     if (validationError) {
       setError(validationError);
@@ -354,8 +594,18 @@ function ProductForm({ onSuccess, onCancel }) {
     setLoading(true);
 
     try {
-      const productData =
-        form.type === "simple" ? buildSimplePayload() : buildVariablePayload();
+      let productData:
+        | CreateSimpleProduct
+        | CreateVariableProduct
+        | CreateBundleProduct;
+
+      if (form.type === "simple") {
+        productData = buildSimplePayload();
+      } else if (form.type === "variable") {
+        productData = buildVariablePayload();
+      } else {
+        productData = buildBundlePayload();
+      }
 
       console.log("Payload enviado:", productData);
 
@@ -365,7 +615,9 @@ function ProductForm({ onSuccess, onCancel }) {
     } catch (error) {
       console.error("Error al crear producto:", error);
 
-      setError(error.message || "No se pudo crear el producto.");
+      setError(
+        error instanceof Error ? error.message : "No se pudo crear el producto."
+      );
     } finally {
       setLoading(false);
     }
@@ -373,9 +625,14 @@ function ProductForm({ onSuccess, onCancel }) {
 
   return (
     <form className="product-form" onSubmit={handleSubmit}>
+      {/* =========================
+          INFORMACIÓN GENERAL
+      ========================= */}
+
       <div className="form-section">
         <div className="form-section-title">
           <h3>Información general</h3>
+
           <p>Datos principales del producto</p>
         </div>
 
@@ -391,11 +648,12 @@ function ProductForm({ onSuccess, onCancel }) {
             <option value="simple">Producto simple</option>
 
             <option value="variable">Producto variable</option>
+
+            <option value="bundle">Combo</option>
           </select>
 
           <small>
-            Los productos variables generan un SKU por cada combinación de
-            características.
+            Los combos están compuestos por productos o variantes existentes.
           </small>
         </div>
 
@@ -406,7 +664,7 @@ function ProductForm({ onSuccess, onCancel }) {
             id="product-name"
             type="text"
             name="name"
-            placeholder="Ej: Joystick inalámbrico"
+            placeholder="Ej: Combo Consola + 2 Joysticks"
             value={form.name}
             onChange={handleChange}
             disabled={loading}
@@ -423,17 +681,22 @@ function ProductForm({ onSuccess, onCancel }) {
             placeholder="Descripción del producto..."
             value={form.description}
             onChange={handleChange}
-            rows="4"
+            rows={4}
             disabled={loading}
           />
         </div>
       </div>
+
+      {/* =========================
+          SIMPLE
+      ========================= */}
 
       {form.type === "simple" && (
         <>
           <div className="form-section">
             <div className="form-section-title">
               <h3>Precio y stock</h3>
+
               <p>Información comercial del producto</p>
             </div>
 
@@ -496,6 +759,10 @@ function ProductForm({ onSuccess, onCancel }) {
           />
         </>
       )}
+
+      {/* =========================
+          VARIABLE
+      ========================= */}
 
       {form.type === "variable" && (
         <div className="form-section variants-section">
@@ -591,7 +858,6 @@ function ProductForm({ onSuccess, onCancel }) {
                             removeAttribute(variantIndex, attributeIndex)
                           }
                           disabled={loading}
-                          aria-label="Eliminar característica"
                         >
                           ×
                         </button>
@@ -677,6 +943,181 @@ function ProductForm({ onSuccess, onCancel }) {
         </div>
       )}
 
+      {/* =========================
+          BUNDLE / COMBO
+      ========================= */}
+
+      {form.type === "bundle" && (
+        <>
+          <div className="form-section">
+            <div className="form-section-title">
+              <div>
+                <h3>Precio del combo</h3>
+
+                <p>El precio final que tendrá el combo.</p>
+              </div>
+            </div>
+
+            <div className="form-grid bundle-price-grid">
+              <div className="form-group">
+                <label htmlFor="bundle-price">Precio *</label>
+
+                <input
+                  id="bundle-price"
+                  type="number"
+                  name="price"
+                  placeholder="850000"
+                  value={form.price}
+                  onChange={handleChange}
+                  min="0"
+                  disabled={loading}
+                  required
+                />
+              </div>
+            </div>
+          </div>
+
+          <div className="form-section bundle-section">
+            <div className="form-section-title">
+              <div>
+                <h3>Componentes del combo</h3>
+
+                <p>
+                  Elegí productos y, si corresponde, una variante específica.
+                </p>
+              </div>
+
+              <button
+                type="button"
+                className="add-variant-button"
+                onClick={addComponent}
+                disabled={loading || loadingProducts}
+              >
+                + Agregar componente
+              </button>
+            </div>
+
+            {loadingProducts && (
+              <div className="bundle-loading">Cargando productos...</div>
+            )}
+
+            {!loadingProducts && products.length === 0 && (
+              <div className="bundle-empty">
+                No hay productos disponibles para agregar al combo.
+              </div>
+            )}
+
+            <div className="bundle-components">
+              {form.components.map((component, componentIndex) => {
+                const selectedProductId = getComponentProductId(
+                  component.skuId
+                );
+
+                const availableSkus = selectedProductId
+                  ? getSkusForProduct(selectedProductId)
+                  : [];
+
+                return (
+                  <div className="bundle-component-card" key={componentIndex}>
+                    <div className="bundle-component-header">
+                      <div>
+                        <span className="variant-number">
+                          Componente {componentIndex + 1}
+                        </span>
+
+                        <p>Producto y SKU que formarán parte del combo</p>
+                      </div>
+
+                      {form.components.length > 1 && (
+                        <button
+                          type="button"
+                          className="remove-variant-button"
+                          onClick={() => removeComponent(componentIndex)}
+                          disabled={loading}
+                        >
+                          Eliminar
+                        </button>
+                      )}
+                    </div>
+
+                    <div className="bundle-component-grid">
+                      <div className="form-group">
+                        <label>Producto</label>
+
+                        <select
+                          value={selectedProductId}
+                          onChange={(event) =>
+                            handleComponentProductChange(
+                              componentIndex,
+                              event.target.value
+                            )
+                          }
+                          disabled={loading || loadingProducts}
+                        >
+                          <option value="">Seleccionar producto</option>
+
+                          {products.map((product) => (
+                            <option key={product.id} value={product.id}>
+                              {product.name} ({product.type})
+                            </option>
+                          ))}
+                        </select>
+                      </div>
+
+                      <div className="form-group">
+                        <label>SKU / Variante</label>
+
+                        <select
+                          value={component.skuId}
+                          onChange={(event) =>
+                            updateComponent(
+                              componentIndex,
+                              "skuId",
+                              event.target.value
+                            )
+                          }
+                          disabled={loading || !selectedProductId}
+                        >
+                          <option value="">Seleccionar SKU</option>
+
+                          {availableSkus.map((sku) => (
+                            <option key={sku.id} value={sku.id}>
+                              {getSkuLabel(sku)}
+                            </option>
+                          ))}
+                        </select>
+                      </div>
+
+                      <div className="form-group">
+                        <label>Cantidad</label>
+
+                        <input
+                          type="number"
+                          min="1"
+                          value={component.quantity}
+                          onChange={(event) =>
+                            updateComponent(
+                              componentIndex,
+                              "quantity",
+                              event.target.value
+                            )
+                          }
+                          disabled={loading}
+                        />
+                      </div>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        </>
+      )}
+
+      {/* =========================
+          PUBLICACIÓN
+      ========================= */}
+
       <div className="form-section">
         <div className="form-section-title">
           <h3>Publicación</h3>
@@ -733,7 +1174,36 @@ function ProductForm({ onSuccess, onCancel }) {
   );
 }
 
-function ImageSection({ images, loading, onAdd, onRemove, onChange }) {
+function getSkuLabel(sku: SKU): string {
+  if (!sku.variantValues || sku.variantValues.length === 0) {
+    return sku.code;
+  }
+
+  const variants = sku.variantValues
+    .map(
+      (variantValue) =>
+        `${variantValue.variant.name}: ${variantValue.variant.value}`
+    )
+    .join(" / ");
+
+  return `${sku.code} — ${variants}`;
+}
+
+interface ImageSectionProps {
+  images: string[];
+  loading: boolean;
+  onAdd: () => void;
+  onRemove: (index: number) => void;
+  onChange: (index: number, value: string) => void;
+}
+
+function ImageSection({
+  images,
+  loading,
+  onAdd,
+  onRemove,
+  onChange,
+}: ImageSectionProps) {
   return (
     <div className="form-section">
       <div className="form-section-title">
