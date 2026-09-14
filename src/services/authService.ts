@@ -1,6 +1,11 @@
+import type { LoginResponse } from "../types/auth";
+
 const API_URL = "https://smart-store-production-e7e1.up.railway.app";
 
-export async function login(email, password) {
+export async function login(
+  email: string,
+  password: string
+): Promise<LoginResponse> {
   const response = await fetch(`${API_URL}/auth/login`, {
     method: "POST",
     headers: {
@@ -18,5 +23,5 @@ export async function login(email, password) {
     throw new Error(data?.message || "Credenciales inválidas");
   }
 
-  return data;
+  return data as LoginResponse;
 }

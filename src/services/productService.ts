@@ -1,6 +1,13 @@
+import type {
+  CreateBundleProduct,
+  CreateSimpleProduct,
+  CreateVariableProduct,
+  Product,
+} from "../types/product";
+
 const API_URL = "https://smart-store-production-e7e1.up.railway.app";
 
-function getAuthHeaders() {
+function getAuthHeaders(): HeadersInit {
   const token = localStorage.getItem("accessToken");
 
   if (!token) {
@@ -13,7 +20,7 @@ function getAuthHeaders() {
   };
 }
 
-export async function getProducts() {
+export async function getProducts(): Promise<Product[]> {
   const response = await fetch(`${API_URL}/products`, {
     headers: getAuthHeaders(),
   });
@@ -26,10 +33,12 @@ export async function getProducts() {
     throw new Error(`Error al obtener productos: ${response.status}`);
   }
 
-  return response.json();
+  return response.json() as Promise<Product[]>;
 }
 
-export async function createProduct(productData) {
+export async function createProduct(
+  productData: CreateSimpleProduct | CreateVariableProduct | CreateBundleProduct
+): Promise<Product> {
   const response = await fetch(`${API_URL}/products`, {
     method: "POST",
     headers: getAuthHeaders(),
@@ -60,5 +69,5 @@ export async function createProduct(productData) {
     throw new Error(errorMessage);
   }
 
-  return response.json();
+  return response.json() as Promise<Product>;
 }
