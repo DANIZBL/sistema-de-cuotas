@@ -1,5 +1,5 @@
+import { uploadProductImage } from "../../services/imageService";
 import { useEffect, useState } from "react";
-
 import { createProduct, getProducts } from "../../services/productService";
 
 import type {
@@ -32,6 +32,11 @@ interface BundleComponentForm {
   quantity: string;
 }
 
+interface ImageFile {
+  file: File;
+  preview: string;
+}
+
 interface ProductFormState {
   type: ProductFormType;
   name: string;
@@ -40,7 +45,7 @@ interface ProductFormState {
   discountedPrice: string;
   stock: string;
   isPublished: boolean;
-  images: string[];
+  imageFiles: ImageFile[];
   variants: VariableForm[];
   components: BundleComponentForm[];
 }
@@ -76,7 +81,7 @@ function ProductForm({ onSuccess, onCancel }: ProductFormProps) {
     discountedPrice: "",
     stock: "",
     isPublished: true,
-    images: [""],
+    imageFiles: [],
     variants: [createEmptyVariant()],
     components: [createEmptyComponent()],
   });
@@ -132,31 +137,41 @@ function ProductForm({ onSuccess, onCancel }: ProductFormProps) {
      IMÁGENES
   ========================= */
 
-  function handleImageChange(index: number, value: string) {
-    setForm((current) => {
-      const images = [...current.images];
+  function handleImageFilesChange(event: React.ChangeEvent<HTMLInputElement>) {
+    const files = Array.from(event.target.files || []);
 
-      images[index] = value;
+    if (!files.length) {
+      return;
+    }
+
+    const newImageFiles: ImageFile[] = files.map((file) => ({
+      file,
+      preview: URL.createObjectURL(file),
+    }));
+
+    setForm((current) => ({
+      ...current,
+      imageFiles: [...current.imageFiles, ...newImageFiles],
+    }));
+
+    event.target.value = "";
+  }
+
+  function removeImageFile(index: number) {
+    setForm((current) => {
+      const image = current.imageFiles[index];
+
+      if (image?.preview) {
+        URL.revokeObjectURL(image.preview);
+      }
 
       return {
         ...current,
-        images,
+        imageFiles: current.imageFiles.filter(
+          (_, imageIndex) => imageIndex !== index
+        ),
       };
     });
-  }
-
-  function addImage() {
-    setForm((current) => ({
-      ...current,
-      images: [...current.images, ""],
-    }));
-  }
-
-  function removeImage(index: number) {
-    setForm((current) => ({
-      ...current,
-      images: current.images.filter((_, imageIndex) => imageIndex !== index),
-    }));
   }
 
   /* =========================
@@ -502,14 +517,14 @@ function ProductForm({ onSuccess, onCancel }: ProductFormProps) {
      PAYLOADS
   ========================= */
 
-  function buildSimplePayload(): CreateSimpleProduct {
+  function buildSimplePayload(imageUrls: string[]): CreateSimpleProduct {
     const productData: CreateSimpleProduct = {
       name: form.name.trim(),
       description: form.description.trim(),
       price: Number(form.price),
       stock: Number(form.stock),
       isPublished: form.isPublished,
-      images: form.images.map((image) => image.trim()).filter(Boolean),
+      images: imageUrls,
     };
 
     if (form.discountedPrice !== "") {
@@ -518,7 +533,6 @@ function ProductForm({ onSuccess, onCancel }: ProductFormProps) {
 
     return productData;
   }
-
   function buildVariablePayload(): CreateVariableProduct {
     return {
       name: form.name.trim(),
@@ -552,7 +566,7 @@ function ProductForm({ onSuccess, onCancel }: ProductFormProps) {
     };
   }
 
-  function buildBundlePayload(): CreateBundleProduct {
+  function buildBundlePayload(imageUrls: string[]): CreateBundleProduct {
     const components: CreateBundleComponent[] = form.components.map(
       (component) => ({
         skuId: component.skuId,
@@ -565,6 +579,7 @@ function ProductForm({ onSuccess, onCancel }: ProductFormProps) {
       description: form.description.trim(),
       price: Number(form.price),
       isPublished: form.isPublished,
+      images: imageUrls,
       components,
     };
   }
@@ -600,11 +615,19 @@ function ProductForm({ onSuccess, onCancel }: ProductFormProps) {
         | CreateBundleProduct;
 
       if (form.type === "simple") {
-        productData = buildSimplePayload();
+        const imageUrls = await Promise.all(
+          form.imageFiles.map((image) => uploadProductImage(image.file))
+        );
+
+        productData = buildSimplePayload(imageUrls);
       } else if (form.type === "variable") {
         productData = buildVariablePayload();
       } else {
-        productData = buildBundlePayload();
+        const imageUrls = await Promise.all(
+          form.imageFiles.map((image) => uploadProductImage(image.file))
+        );
+
+        productData = buildBundlePayload(imageUrls);
       }
 
       console.log("Payload enviado:", productData);
@@ -751,11 +774,10 @@ function ProductForm({ onSuccess, onCancel }: ProductFormProps) {
           </div>
 
           <ImageSection
-            images={form.images}
+            images={form.imageFiles}
             loading={loading}
-            onAdd={addImage}
-            onRemove={removeImage}
-            onChange={handleImageChange}
+            onAdd={handleImageFilesChange}
+            onRemove={removeImageFile}
           />
         </>
       )}
@@ -977,6 +999,13 @@ function ProductForm({ onSuccess, onCancel }: ProductFormProps) {
             </div>
           </div>
 
+          <ImageSection
+            images={form.imageFiles}
+            loading={loading}
+            onAdd={handleImageFilesChange}
+            onRemove={removeImageFile}
+          />
+
           <div className="form-section bundle-section">
             <div className="form-section-title">
               <div>
@@ -1190,62 +1219,55 @@ function getSkuLabel(sku: SKU): string {
 }
 
 interface ImageSectionProps {
-  images: string[];
+  images: ImageFile[];
   loading: boolean;
-  onAdd: () => void;
+  onAdd: (event: React.ChangeEvent<HTMLInputElement>) => void;
   onRemove: (index: number) => void;
-  onChange: (index: number, value: string) => void;
 }
 
-function ImageSection({
-  images,
-  loading,
-  onAdd,
-  onRemove,
-  onChange,
-}: ImageSectionProps) {
+function ImageSection({ images, loading, onAdd, onRemove }: ImageSectionProps) {
   return (
     <div className="form-section">
       <div className="form-section-title">
         <div>
           <h3>Imágenes</h3>
 
-          <p>Agregá las URLs de las imágenes</p>
+          <p>Seleccioná las imágenes del producto</p>
         </div>
 
-        <button
-          type="button"
-          className="add-image-button"
-          onClick={onAdd}
-          disabled={loading}
-        >
-          + Agregar
-        </button>
+        <label className="add-image-button">
+          + Agregar imágenes
+          <input
+            type="file"
+            accept="image/*"
+            multiple
+            onChange={onAdd}
+            disabled={loading}
+            hidden
+          />
+        </label>
       </div>
 
-      <div className="images-form">
-        {images.map((image, index) => (
-          <div className="image-input" key={index}>
-            <input
-              type="url"
-              placeholder="https://..."
-              value={image}
-              onChange={(event) => onChange(index, event.target.value)}
-              disabled={loading}
-            />
+      {images.length === 0 ? (
+        <div className="images-empty">Todavía no agregaste imágenes.</div>
+      ) : (
+        <div className="images-preview-grid">
+          {images.map((image, index) => (
+            <div className="image-preview-card" key={image.preview}>
+              <img src={image.preview} alt={`Imagen ${index + 1}`} />
 
-            {images.length > 1 && (
               <button
                 type="button"
                 onClick={() => onRemove(index)}
                 disabled={loading}
+                className="image-remove-button"
               >
                 ×
               </button>
-            )}
-          </div>
-        ))}
-      </div>
+            </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 }
