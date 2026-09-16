@@ -6,6 +6,8 @@ import Products from "./pages/Products";
 import Login from "./pages/Login/Login";
 
 import "./App.css";
+import { Route, Routes } from "react-router";
+import Categories from "./components/categories/Categories";
 
 function App() {
   const [user, setUser] = useState(() => {
@@ -41,7 +43,10 @@ function App() {
         <Header onMenuClick={() => setSidebarOpen(true)} />
 
         <main className="admin-content">
-          <Products />
+          <Routes>
+            <Route path="/" element={<Products />} />
+            <Route path="/categorias" element={<Categories />} />
+          </Routes>
         </main>
       </div>
     </div>
