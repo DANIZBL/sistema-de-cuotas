@@ -23,9 +23,7 @@ export async function getProducts(): Promise<Product[]> {
 export async function createProduct(
   productData: CreateSimpleProduct | CreateVariableProduct | CreateBundleProduct
 ): Promise<Product> {
-  const response = await api.post(`/products`, {
-    body: JSON.stringify(productData),
-  });
+  const response = await api.post(`/products`, productData);
 
   if (!response.data) {
     let errorMessage = `Error al crear producto: ${response.status}`;
