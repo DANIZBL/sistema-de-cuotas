@@ -1,3 +1,4 @@
+import { NavLink } from "react-router";
 import "./Sidebar.css";
 
 function Sidebar({ isOpen, onClose }) {
@@ -22,20 +23,41 @@ function Sidebar({ isOpen, onClose }) {
         <nav className="sidebar-nav">
           <p className="sidebar-section-title">GESTIÓN</p>
 
-          <button className="sidebar-item active">
-            <span className="sidebar-icon">📦</span>
-            Productos
-          </button>
+          <NavLink to={"/"}>
+            {({ isActive }) => (
+              <button className={`sidebar-item ${isActive ? "active" : ""}`}>
+                <span className="sidebar-icon">📦</span>
+                Productos
+              </button>
+            )}
+          </NavLink>
 
-          <button className="sidebar-item">
-            <span className="sidebar-icon">💳</span>
-            Cuotas
-          </button>
+          <NavLink to={"/categorias"}>
+            {({ isActive }) => (
+              <button className={`sidebar-item ${isActive ? "active" : ""}`}>
+                <span className="sidebar-icon">📋</span>
+                Categorías
+              </button>
+            )}
+          </NavLink>
 
-          <button className="sidebar-item">
-            <span className="sidebar-icon">👥</span>
-            Clientes
-          </button>
+          <NavLink to={"/cuotas"}>
+            {({ isActive }) => (
+              <button className={`sidebar-item ${isActive ? "active" : ""}`}>
+                <span className="sidebar-icon">💳</span>
+                Cuotas
+              </button>
+            )}
+          </NavLink>
+
+          <NavLink to={"/clientes"}>
+            {({ isActive }) => (
+              <button className={`sidebar-item ${isActive ? "active" : ""}`}>
+                <span className="sidebar-icon">👥</span>
+                Clientes
+              </button>
+            )}
+          </NavLink>
 
           <p className="sidebar-section-title">SISTEMA</p>
 

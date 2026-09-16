@@ -7,6 +7,7 @@ import ProductForm from "../components/products/ProductForm";
 import Modal from "../components/ui/Modal";
 
 import "./Products.css";
+import SubHeaderComponent from "../components/SearchAndNewButton";
 
 function Products() {
   const [products, setProducts] = useState([]);
@@ -62,40 +63,25 @@ function Products() {
 
   return (
     <section className="products-page">
-      <div className="products-toolbar">
-        <div className="products-search">
-          <span>🔎</span>
+      <SubHeaderComponent
+        search={search}
+        setSearch={setSearch}
+        setShowCreateModal={setShowCreateModal}
+        placeholder="Buscar producto..."
+      >
+        <select
+          value={typeFilter}
+          onChange={(event) => setTypeFilter(event.target.value)}
+        >
+          <option value="all">Todos los tipos</option>
 
-          <input
-            type="text"
-            placeholder="Buscar producto..."
-            value={search}
-            onChange={(event) => setSearch(event.target.value)}
-          />
-        </div>
+          <option value="simple">Simple</option>
 
-        <div className="products-actions">
-          <select
-            value={typeFilter}
-            onChange={(event) => setTypeFilter(event.target.value)}
-          >
-            <option value="all">Todos los tipos</option>
+          <option value="variable">Variable</option>
 
-            <option value="simple">Simple</option>
-
-            <option value="variable">Variable</option>
-
-            <option value="bundle">Bundle</option>
-          </select>
-
-          <button
-            className="new-product-button"
-            onClick={() => setShowCreateModal(true)}
-          >
-            + Nuevo producto
-          </button>
-        </div>
-      </div>
+          <option value="bundle">Bundle</option>
+        </select>
+      </SubHeaderComponent>
 
       <div className="products-info">
         <strong>{filteredProducts.length}</strong>
