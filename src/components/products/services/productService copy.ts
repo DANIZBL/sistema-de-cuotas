@@ -1,10 +1,10 @@
-import api from "../lib/axios.config";
+import api from "../../../lib/axios.config";
 import type {
   CreateBundleProduct,
   CreateSimpleProduct,
   CreateVariableProduct,
   Product,
-} from "../types/product";
+} from "../types";
 
 export async function getProducts(): Promise<Product[]> {
   const response = await api.get(`/products`);

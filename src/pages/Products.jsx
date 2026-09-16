@@ -1,13 +1,11 @@
 import { useEffect, useMemo, useState } from "react";
-
-import { getProducts } from "../services/productService";
-
 import ProductTable from "../components/products/ProductTable";
 import ProductForm from "../components/products/ProductForm";
 import Modal from "../components/ui/Modal";
 
 import "./Products.css";
 import SubHeaderComponent from "../components/SearchAndNewButton";
+import { getProducts } from "../components/products/services/productService";
 
 function Products() {
   const [products, setProducts] = useState([]);
