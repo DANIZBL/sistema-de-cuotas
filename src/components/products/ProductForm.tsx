@@ -15,8 +15,8 @@ import { ProductFormProps } from "./types";
 function ProductForm({ onSuccess, onCancel }: ProductFormProps) {
   const {
     form, setForm,
-    products, setProducts,
-    loadingProducts, setLoadingProducts,
+    products,
+    loadingProducts,
     loading, setLoading,
     error, setError
   } = useProducts()

@@ -25,7 +25,7 @@ export default function SubHeaderComponent({ search, setSearch, children, setSho
 
 
             <div className="products-actions">
-                {children && children}
+                {children}
                 <button
                     className="new-product-button"
                     onClick={() => setShowCreateModal(true)}
