@@ -89,6 +89,7 @@ function Products() {
         filteredElement={filteredProducts}
         loadElements={loadProducts}
         TableComponent={<ProductTable products={filteredProducts} />}
+        elementText="productos"
       />
 
       {showCreateModal && (

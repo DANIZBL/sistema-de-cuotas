@@ -7,7 +7,7 @@ import Login from "./pages/Login/Login";
 
 import "./App.css";
 import { Route, Routes } from "react-router";
-import Categories from "./components/categories/Categories";
+import Categories from "./pages/Categories";
 
 function App() {
   const [user, setUser] = useState(() => {
