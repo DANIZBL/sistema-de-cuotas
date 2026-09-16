@@ -1,0 +1,145 @@
+import type { Product } from "../model/types";
+import "./ProductTable.css";
+
+interface ProductTableProps {
+  products: Product[];
+}
+
+const priceFormatter = new Intl.NumberFormat("es-AR", {
+  style: "currency",
+  currency: "ARS",
+  maximumFractionDigits: 0,
+});
+
+const TYPE_LABELS: Record<Product["type"], string> = {
+  simple: "Simple",
+  variable: "Variable",
+  bundle: "Bundle",
+};
+
+function formatPrice(price: number | null): string {
+  if (price === null) {
+    return "-";
+  }
+
+  return priceFormatter.format(price);
+}
+
+function getStock(product: Product): number {
+  return product.skus.reduce(
+    (total, sku) => total + (Number(sku.stock) || 0),
+    0
+  );
+}
+
+function getPrice(product: Product): number | null {
+  const sku = product.skus[0];
+
+  if (!sku) {
+    return null;
+  }
+
+  return sku.discountedPrice ?? sku.price;
+}
+
+function ProductTable({ products }: ProductTableProps) {
+  if (!products.length) {
+    return (
+      <div className="empty-products">
+        <div className="empty-icon">📦</div>
+
+        <h3>No encontramos productos</h3>
+
+        <p>Probá modificando la búsqueda o los filtros.</p>
+      </div>
+    );
+  }
+
+  return (
+    <div className="products-table-container">
+      <table className="products-table">
+        <thead>
+          <tr>
+            <th>Producto</th>
+            <th>Tipo</th>
+            <th>Precio</th>
+            <th>SKUs</th>
+            <th>Stock</th>
+            <th>Estado</th>
+            <th></th>
+          </tr>
+        </thead>
+
+        <tbody>
+          {products.map((product) => {
+            const stock = getStock(product);
+
+            const price = getPrice(product);
+
+            return (
+              <tr key={product.id}>
+                <td>
+                  <div className="product-name">
+                    <div className="product-image">
+                      {product.images.length ? (
+                        <img src={product.images[0].url} alt={product.name} />
+                      ) : (
+                        "📦"
+                      )}
+                    </div>
+
+                    <div>
+                      <strong>{product.name}</strong>
+
+                      <span>
+                        ID: {product.id.slice(0, 8)}
+                        ...
+                      </span>
+                    </div>
+                  </div>
+                </td>
+
+                <td>
+                  <span className={`type-badge type-${product.type}`}>
+                    {TYPE_LABELS[product.type] ?? product.type}
+                  </span>
+                </td>
+
+                <td>
+                  <strong>{formatPrice(price)}</strong>
+                </td>
+
+                <td>{product.skus.length}</td>
+
+                <td>
+                  <span className={stock === 0 ? "stock stock-empty" : "stock"}>
+                    {stock}
+                  </span>
+                </td>
+
+                <td>
+                  <span
+                    className={
+                      product.isPublished
+                        ? "status published"
+                        : "status unpublished"
+                    }
+                  >
+                    <span />
+                    {product.isPublished ? "Publicado" : "Oculto"}
+                  </span>
+                </td>
+
+                <td>
+                  <button className="product-menu">⋮</button>
+                </td>
+              </tr>
+            );
+          })}
+        </tbody>
+      </table>
+    </div>
+  );
+}
+
+export default ProductTable;

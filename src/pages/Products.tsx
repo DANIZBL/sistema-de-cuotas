@@ -1,51 +1,31 @@
-import { useEffect, useMemo, useState } from "react";
-import ProductTable from "../components/products/ProductTable";
-import ProductForm from "../components/products/ProductForm";
+import { useMemo, useState } from "react";
 import Modal from "../components/ui/Modal";
+import SubHeaderComponent from "../components/SearchAndNewButton";
+import {
+  ProductForm,
+  ProductTable,
+  useProductList,
+  type ProductType,
+} from "../components/products";
 
 import "./Products.css";
-import SubHeaderComponent from "../components/SearchAndNewButton";
-import { getProducts } from "../components/products/services/productService";
+
+type TypeFilter = ProductType | "all";
 
 function Products() {
-  const [products, setProducts] = useState([]);
-
-  const [loading, setLoading] = useState(true);
-
-  const [error, setError] = useState("");
+  const { products, loading, error, reload } = useProductList();
 
   const [search, setSearch] = useState("");
 
-  const [typeFilter, setTypeFilter] = useState("all");
+  const [typeFilter, setTypeFilter] = useState<TypeFilter>("all");
 
   const [showCreateModal, setShowCreateModal] = useState(false);
 
-  useEffect(() => {
-    loadProducts();
-  }, []);
-
-  async function loadProducts() {
-    try {
-      setLoading(true);
-      setError("");
-
-      const data = await getProducts();
-
-      setProducts(data);
-    } catch (error) {
-      console.error(error);
-
-      setError("No se pudieron cargar los productos.");
-    } finally {
-      setLoading(false);
-    }
-  }
-
   const filteredProducts = useMemo(() => {
+    const term = search.trim().toLowerCase();
+
     return products.filter((product) => {
-      const matchesSearch = product.name
-        ?.toLowerCase()
-        .includes(search.toLowerCase());
+      const matchesSearch = product.name.toLowerCase().includes(term);
 
       const matchesType = typeFilter === "all" || product.type === typeFilter;
 
@@ -56,7 +36,7 @@ function Products() {
   function handleProductCreated() {
     setShowCreateModal(false);
 
-    loadProducts();
+    reload();
   }
 
   return (
@@ -69,7 +49,9 @@ function Products() {
       >
         <select
           value={typeFilter}
-          onChange={(event) => setTypeFilter(event.target.value)}
+          onChange={(event) =>
+            setTypeFilter(event.target.value as TypeFilter)
+          }
         >
           <option value="all">Todos los tipos</option>
 
@@ -100,7 +82,7 @@ function Products() {
         <div className="products-state error-state">
           <p>{error}</p>
 
-          <button onClick={loadProducts}>Intentar nuevamente</button>
+          <button onClick={() => reload()}>Intentar nuevamente</button>
         </div>
       )}
 
@@ -109,6 +91,8 @@ function Products() {
       {showCreateModal && (
         <Modal title="Nuevo producto" onClose={() => setShowCreateModal(false)}>
           <ProductForm
+            products={products}
+            loadingProducts={loading}
             onSuccess={handleProductCreated}
             onCancel={() => setShowCreateModal(false)}
           />

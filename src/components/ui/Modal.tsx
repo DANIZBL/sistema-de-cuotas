@@ -2,9 +2,15 @@ import { useEffect } from "react";
 
 import "./Modal.css";
 
-function Modal({ title, children, onClose }) {
+interface ModalProps {
+  title: string;
+  children: React.ReactNode;
+  onClose: () => void;
+}
+
+function Modal({ title, children, onClose }: ModalProps) {
   useEffect(() => {
-    function handleEscape(event) {
+    function handleEscape(event: KeyboardEvent) {
       if (event.key === "Escape") {
         onClose();
       }
