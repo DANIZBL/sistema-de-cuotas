@@ -87,5 +87,6 @@ export interface CreateBundleProduct {
   description: string;
   price: number;
   isPublished: boolean;
+  images: string[];
   components: CreateBundleComponent[];
 }
