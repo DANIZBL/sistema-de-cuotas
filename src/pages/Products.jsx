@@ -6,11 +6,13 @@ import Modal from "../components/ui/Modal";
 import "./Products.css";
 import SubHeaderComponent from "../components/SearchAndNewButton";
 import { getProducts } from "../components/products/services/productService";
+import BaseTable from "../components/BaseTable";
+import { LoadersTexts } from "../types/enums";
 
 function Products() {
   const [products, setProducts] = useState([]);
 
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(LoadersTexts.PRODUCTS);
 
   const [error, setError] = useState("");
 
@@ -26,7 +28,7 @@ function Products() {
 
   async function loadProducts() {
     try {
-      setLoading(true);
+      setLoading(LoadersTexts.PRODUCTS);
       setError("");
 
       const data = await getProducts();
@@ -37,7 +39,7 @@ function Products() {
 
       setError("No se pudieron cargar los productos.");
     } finally {
-      setLoading(false);
+      setLoading("");
     }
   }
 
@@ -81,30 +83,13 @@ function Products() {
         </select>
       </SubHeaderComponent>
 
-      <div className="products-info">
-        <strong>{filteredProducts.length}</strong>
-
-        <span>
-          {filteredProducts.length === 1 ? " producto" : " productos"}
-        </span>
-      </div>
-
-      {loading && (
-        <div className="products-state">
-          <div className="spinner" />
-          <p>Cargando productos...</p>
-        </div>
-      )}
-
-      {!loading && error && (
-        <div className="products-state error-state">
-          <p>{error}</p>
-
-          <button onClick={loadProducts}>Intentar nuevamente</button>
-        </div>
-      )}
-
-      {!loading && !error && <ProductTable products={filteredProducts} />}
+      <BaseTable
+        error={error}
+        loading={loading}
+        filteredElement={filteredProducts}
+        loadElements={loadProducts}
+        TableComponent={<ProductTable products={filteredProducts} />}
+      />
 
       {showCreateModal && (
         <Modal title="Nuevo producto" onClose={() => setShowCreateModal(false)}>
