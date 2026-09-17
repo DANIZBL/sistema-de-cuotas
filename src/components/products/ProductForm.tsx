@@ -12,7 +12,7 @@ import { addComponent, removeComponent, updateComponent } from "./services/updat
 import { addVariant, removeVariant, updateVariant } from "./services/updateVariant";
 import { ProductFormProps } from "./types";
 
-function ProductForm({ onSuccess, onCancel }: ProductFormProps) {
+function ProductForm({ onSuccess, onCancel, editId }: ProductFormProps) {
   const {
     form, setForm,
     products,
@@ -20,7 +20,7 @@ function ProductForm({ onSuccess, onCancel }: ProductFormProps) {
     loading, setLoading,
     error, setError,
     categories
-  } = useProducts()
+  } = useProducts(editId)
 
   return (
     <form className="product-form" onSubmit={(event) => handleSubmit({ event, form, onSuccess, setError, setLoading })}>

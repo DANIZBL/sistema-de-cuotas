@@ -1,7 +1,7 @@
 import { ImageFile, ProductFormState } from "./types";
 
 interface ImageSectionProps {
-    images: ImageFile[];
+    images: Partial<ImageFile>[];
     loading: boolean;
     onAdd: (event: React.ChangeEvent<HTMLInputElement>, setForm: React.Dispatch<React.SetStateAction<ProductFormState>>) => void;
     onRemove: (index: number, setForm: React.Dispatch<React.SetStateAction<ProductFormState>>) => void;

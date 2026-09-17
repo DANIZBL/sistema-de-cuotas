@@ -22,6 +22,8 @@ function Products() {
 
   const [showCreateModal, setShowCreateModal] = useState(false);
 
+  const [editId, setEditId] = useState("")
+
   useEffect(() => {
     loadProducts();
   }, []);
@@ -35,7 +37,6 @@ function Products() {
 
       setProducts(data);
     } catch (error) {
-      console.error(error);
 
       setError("No se pudieron cargar los productos.");
     } finally {
@@ -88,15 +89,22 @@ function Products() {
         loading={loading}
         filteredElement={filteredProducts}
         loadElements={loadProducts}
-        TableComponent={<ProductTable products={filteredProducts} />}
+        TableComponent={<ProductTable
+          products={filteredProducts}
+          setEditId={setEditId}
+        />}
         elementText="productos"
       />
 
-      {showCreateModal && (
-        <Modal title="Nuevo producto" onClose={() => setShowCreateModal(false)}>
+      {(showCreateModal || editId) && (
+        <Modal title="Nuevo producto" onClose={() => {
+          setShowCreateModal(false)
+          setEditId("")
+        }}>
           <ProductForm
             onSuccess={handleProductCreated}
             onCancel={() => setShowCreateModal(false)}
+            editId={editId}
           />
         </Modal>
       )}

@@ -14,7 +14,6 @@ export async function loadProducts({ setLoadingProducts, setProducts }: Props) {
 
         setProducts(data);
     } catch (error) {
-        console.error("Error al cargar productos:", error);
     } finally {
         setLoadingProducts(false);
     }

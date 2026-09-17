@@ -32,7 +32,7 @@ export interface ProductFormState {
     discountedPrice: string;
     stock: string;
     isPublished: boolean;
-    imageFiles: ImageFile[];
+    imageFiles: Partial<ImageFile>[];
     variants: VariableForm[];
     components: BundleComponentForm[];
     categories: Pick<Category, "id">[] | []
@@ -41,6 +41,7 @@ export interface ProductFormState {
 export interface ProductFormProps {
     onSuccess: () => void;
     onCancel: () => void;
+    editId?: string
 }
 
 export type ProductType = "simple" | "variable" | "bundle";
@@ -94,6 +95,7 @@ export interface Product {
     isPublished: boolean;
     skus: SKU[];
     images: ProductImage[];
+    categories: Category[]
 }
 
 export interface CreateSimpleProduct {
@@ -137,4 +139,53 @@ export interface CreateBundleProduct {
     categoryIds: string[];
     images: string[];
     components: CreateBundleComponent[];
+}
+
+export interface ProductApi {
+    id: string,
+    name: string,
+    type: string,
+    isPublished: boolean,
+    description: string,
+    skus: [
+        {
+            id: string,
+            code: string,
+            price: number,
+            discountedPrice: null | number,
+            stock: number,
+            variantValues: {
+                id: string,
+                variant: {
+                    id: string,
+                    name: string,
+                    value: string
+                }
+            }[] | [],
+            images: { url: string }[] | [],
+            components: {
+                id: string,
+                componentSku: {
+                    id: string,
+                    product: {
+                        id: string,
+                        name: string
+                    },
+                    variantValues: {
+                        id: string,
+                        variant: {
+                            id: string,
+                            name: string,
+                            value: string
+                        }
+                    }[] | []
+                }
+            }[] | []
+        }
+    ],
+    images: { url: string }[] | [],
+    categories: {
+        id: string,
+        name: string
+    }[] | []
 }

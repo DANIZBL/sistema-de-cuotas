@@ -49,7 +49,7 @@ export async function handleSubmit({
 
         if (form.type === "simple") {
             const imageUrls = await Promise.all(
-                form.imageFiles.map((image) => uploadProductImage(image.file))
+                form.imageFiles.map((image) => uploadProductImage(image.file as File))
             );
 
             productData = buildSimplePayload(imageUrls, form);
@@ -57,19 +57,16 @@ export async function handleSubmit({
             productData = buildVariablePayload(form);
         } else {
             const imageUrls = await Promise.all(
-                form.imageFiles.map((image) => uploadProductImage(image.file))
+                form.imageFiles.map((image) => uploadProductImage(image.file as File))
             );
 
             productData = buildBundlePayload(imageUrls, form);
         }
 
-        console.log("Payload enviado:", productData);
-
         await createProduct(productData);
 
         onSuccess();
     } catch (error) {
-        console.error("Error al crear producto:", error);
 
         setError(
             error instanceof Error ? error.message : "No se pudo crear el producto."

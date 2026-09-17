@@ -30,7 +30,6 @@ api.interceptors.response.use(
             window.location.href = "/login";
         }
         if (error.response && error.response.status === 500) {
-            console.error("Server error:", error.response.data);
         }
         return Promise.reject(error);
     },
