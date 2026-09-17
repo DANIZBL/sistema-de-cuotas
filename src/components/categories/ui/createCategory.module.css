@@ -1,0 +1,36 @@
+.inputs-container {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.labels {
+    width: fit-content;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.labels input {
+    border-radius: 5px;
+    border: 1px solid black;
+    height: 30px;
+    padding-left: 5px;
+}
+
+.input-spinner {
+    display: flex;
+    align-items: start;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.input-spinner p {
+    margin: 0;
+}
+
+.inputs {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}

@@ -11,6 +11,7 @@ export default function useCategoreisHook() {
     const [categories, setCategories] = useState<Category[]>([])
     const [loader, setLoader] = useState<string>("")
     const [error, setError] = useState<string>("")
+    const [newCategories, setNewCategories] = useState<{ id: string, value: string }[]>([])
 
     useEffect(() => {
         (async () => {
@@ -36,6 +37,7 @@ export default function useCategoreisHook() {
         showCreateModal, setShowCreateModal,
         search, setSearch,
         loader, setLoader,
-        error, setError
+        error, setError,
+        newCategories, setNewCategories
     }
 } 
