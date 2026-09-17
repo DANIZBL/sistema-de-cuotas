@@ -1,3 +1,5 @@
+import { Category } from "../categories/api/types";
+
 export type ProductFormType = "simple" | "variable" | "bundle";
 
 export interface AttributeForm {
@@ -33,6 +35,7 @@ export interface ProductFormState {
     imageFiles: ImageFile[];
     variants: VariableForm[];
     components: BundleComponentForm[];
+    categories: Pick<Category, "id">[] | []
 }
 
 export interface ProductFormProps {
@@ -100,6 +103,7 @@ export interface CreateSimpleProduct {
     discountedPrice?: number;
     stock: number;
     isPublished: boolean;
+    categoryIds: string[];
     images: string[];
 }
 
@@ -116,6 +120,7 @@ export interface CreateVariableProduct {
     price: number;
     stock: 0;
     isPublished: boolean;
+    categoryIds: string[];
     variants: CreateVariant[];
 }
 
@@ -129,6 +134,7 @@ export interface CreateBundleProduct {
     description: string;
     price: number;
     isPublished: boolean;
+    categoryIds: string[];
     images: string[];
     components: CreateBundleComponent[];
 }

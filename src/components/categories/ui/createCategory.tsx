@@ -66,10 +66,10 @@ export default function CreateCategory({
 
                     return [...updated, { id: crypto.randomUUID(), saving: Saving.NONE, value: "" }]
                 })
-            }, 1000)
+            }, 1200)
 
             return () => clearTimeout(saveTimeout)
-        }, 500)
+        }, 800)
 
         return () => clearTimeout(pendingTimeout)
     }, [category, setNewCategories])

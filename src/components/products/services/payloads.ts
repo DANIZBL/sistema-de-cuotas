@@ -8,6 +8,7 @@ export function buildSimplePayload(imageUrls: string[], form: ProductFormState):
         price: Number(form.price),
         stock: Number(form.stock),
         isPublished: form.isPublished,
+        categoryIds: form.categories.map(cat => cat.id),
         images: imageUrls,
     };
 
@@ -24,6 +25,7 @@ export function buildVariablePayload(form: ProductFormState): CreateVariableProd
         price: Number(form.variants[0].price) || 0,
         stock: 0,
         isPublished: form.isPublished,
+        categoryIds: form.categories.map(cat => cat.id),
         variants: form.variants.map((variant) => {
             const payloadVariant = {
                 variant: variant.attributes.map((attribute) => ({
@@ -63,6 +65,7 @@ export function buildBundlePayload(imageUrls: string[], form: ProductFormState):
         description: form.description.trim(),
         price: Number(form.price),
         isPublished: form.isPublished,
+        categoryIds: form.categories.map(cat => cat.id),
         images: imageUrls,
         components,
     };
