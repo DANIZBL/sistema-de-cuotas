@@ -30,7 +30,6 @@ function Login({ onLogin }) {
 
       onLogin(data.user);
     } catch (error) {
-      console.error("Error de login:", error);
 
       setError(error.message || "No se pudo iniciar sesión.");
     } finally {

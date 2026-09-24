@@ -1,0 +1,191 @@
+import { Category } from "../categories/api/types";
+
+export type ProductFormType = "simple" | "variable" | "bundle";
+
+export interface AttributeForm {
+    name: string;
+    value: string;
+}
+
+export interface VariableForm {
+    attributes: AttributeForm[];
+    price: string;
+    discountedPrice: string;
+    stock: string;
+}
+
+export interface BundleComponentForm {
+    skuId: string;
+    quantity: string;
+}
+
+export interface ImageFile {
+    file: File;
+    preview: string;
+}
+
+export interface ProductFormState {
+    type: ProductFormType;
+    name: string;
+    description: string;
+    price: string;
+    discountedPrice: string;
+    stock: string;
+    isPublished: boolean;
+    imageFiles: Partial<ImageFile>[];
+    variants: VariableForm[];
+    components: BundleComponentForm[];
+    categories: Pick<Category, "id">[] | []
+}
+
+export interface ProductFormProps {
+    onSuccess: () => void;
+    onCancel: () => void;
+    editId?: string
+}
+
+export type ProductType = "simple" | "variable" | "bundle";
+
+export interface Variant {
+    name: string;
+    value: string;
+}
+
+export interface VariantValue {
+    id: string;
+    variantId: string;
+    variant: Variant;
+}
+
+export interface ProductImage {
+    id: string;
+    url: string;
+    position: number;
+}
+
+export interface SKUImage {
+    id: string;
+    url: string;
+    position: number;
+}
+
+export interface Component {
+    skuId: string;
+    quantity: number;
+}
+
+export interface SKU {
+    id: string;
+    productId: string;
+    code: string;
+    price: number;
+    discountedPrice: number;
+    stock: number;
+    variantValues: VariantValue[];
+    images: SKUImage[];
+    components: Component[];
+    partOf: unknown[];
+}
+
+export interface Product {
+    id: string;
+    name: string;
+    description: string;
+    type: ProductType;
+    isPublished: boolean;
+    skus: SKU[];
+    images: ProductImage[];
+    categories: Category[]
+}
+
+export interface CreateSimpleProduct {
+    name: string;
+    description: string;
+    price: number;
+    discountedPrice?: number;
+    stock: number;
+    isPublished: boolean;
+    categoryIds: string[];
+    images: string[];
+}
+
+export interface CreateVariant {
+    variant: Variant[];
+    stock: number;
+    price?: number;
+    discountedPrice?: number;
+}
+
+export interface CreateVariableProduct {
+    name: string;
+    description: string;
+    price: number;
+    stock: 0;
+    isPublished: boolean;
+    categoryIds: string[];
+    variants: CreateVariant[];
+}
+
+export interface CreateBundleComponent {
+    skuId: string;
+    quantity: number;
+}
+
+export interface CreateBundleProduct {
+    name: string;
+    description: string;
+    price: number;
+    isPublished: boolean;
+    categoryIds: string[];
+    images: string[];
+    components: CreateBundleComponent[];
+}
+
+export interface ProductApi {
+    id: string,
+    name: string,
+    type: string,
+    isPublished: boolean,
+    description: string,
+    skus: [
+        {
+            id: string,
+            code: string,
+            price: number,
+            discountedPrice: null | number,
+            stock: number,
+            variantValues: {
+                id: string,
+                variant: {
+                    id: string,
+                    name: string,
+                    value: string
+                }
+            }[] | [],
+            images: { url: string }[] | [],
+            components: {
+                id: string,
+                componentSku: {
+                    id: string,
+                    product: {
+                        id: string,
+                        name: string
+                    },
+                    variantValues: {
+                        id: string,
+                        variant: {
+                            id: string,
+                            name: string,
+                            value: string
+                        }
+                    }[] | []
+                }
+            }[] | []
+        }
+    ],
+    images: { url: string }[] | [],
+    categories: {
+        id: string,
+        name: string
+    }[] | []
+}

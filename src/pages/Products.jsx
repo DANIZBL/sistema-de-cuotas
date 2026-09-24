@@ -1,17 +1,18 @@
 import { useEffect, useMemo, useState } from "react";
-
-import { getProducts } from "../services/productService";
-
 import ProductTable from "../components/products/ProductTable";
 import ProductForm from "../components/products/ProductForm";
 import Modal from "../components/ui/Modal";
 
 import "./Products.css";
+import SubHeaderComponent from "../components/SearchAndNewButton";
+import { getProducts } from "../components/products/services/productService";
+import BaseTable from "../components/BaseTable";
+import { LoadersTexts } from "../types/enums";
 
 function Products() {
   const [products, setProducts] = useState([]);
 
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(LoadersTexts.PRODUCTS);
 
   const [error, setError] = useState("");
 
@@ -21,24 +22,25 @@ function Products() {
 
   const [showCreateModal, setShowCreateModal] = useState(false);
 
+  const [editId, setEditId] = useState("")
+
   useEffect(() => {
     loadProducts();
   }, []);
 
   async function loadProducts() {
     try {
-      setLoading(true);
+      setLoading(LoadersTexts.PRODUCTS);
       setError("");
 
       const data = await getProducts();
 
       setProducts(data);
     } catch (error) {
-      console.error(error);
 
       setError("No se pudieron cargar los productos.");
     } finally {
-      setLoading(false);
+      setLoading("");
     }
   }
 
@@ -62,71 +64,47 @@ function Products() {
 
   return (
     <section className="products-page">
-      <div className="products-toolbar">
-        <div className="products-search">
-          <span>🔎</span>
+      <SubHeaderComponent
+        search={search}
+        setSearch={setSearch}
+        setShowCreateModal={setShowCreateModal}
+        placeholder="Buscar producto..."
+      >
+        <select
+          value={typeFilter}
+          onChange={(event) => setTypeFilter(event.target.value)}
+        >
+          <option value="all">Todos los tipos</option>
 
-          <input
-            type="text"
-            placeholder="Buscar producto..."
-            value={search}
-            onChange={(event) => setSearch(event.target.value)}
-          />
-        </div>
+          <option value="simple">Simple</option>
 
-        <div className="products-actions">
-          <select
-            value={typeFilter}
-            onChange={(event) => setTypeFilter(event.target.value)}
-          >
-            <option value="all">Todos los tipos</option>
+          <option value="variable">Variable</option>
 
-            <option value="simple">Simple</option>
+          <option value="bundle">Bundle</option>
+        </select>
+      </SubHeaderComponent>
 
-            <option value="variable">Variable</option>
+      <BaseTable
+        error={error}
+        loading={loading}
+        filteredElement={filteredProducts}
+        loadElements={loadProducts}
+        TableComponent={<ProductTable
+          products={filteredProducts}
+          setEditId={setEditId}
+        />}
+        elementText="productos"
+      />
 
-            <option value="bundle">Bundle</option>
-          </select>
-
-          <button
-            className="new-product-button"
-            onClick={() => setShowCreateModal(true)}
-          >
-            + Nuevo producto
-          </button>
-        </div>
-      </div>
-
-      <div className="products-info">
-        <strong>{filteredProducts.length}</strong>
-
-        <span>
-          {filteredProducts.length === 1 ? " producto" : " productos"}
-        </span>
-      </div>
-
-      {loading && (
-        <div className="products-state">
-          <div className="spinner" />
-          <p>Cargando productos...</p>
-        </div>
-      )}
-
-      {!loading && error && (
-        <div className="products-state error-state">
-          <p>{error}</p>
-
-          <button onClick={loadProducts}>Intentar nuevamente</button>
-        </div>
-      )}
-
-      {!loading && !error && <ProductTable products={filteredProducts} />}
-
-      {showCreateModal && (
-        <Modal title="Nuevo producto" onClose={() => setShowCreateModal(false)}>
+      {(showCreateModal || editId) && (
+        <Modal title="Nuevo producto" onClose={() => {
+          setShowCreateModal(false)
+          setEditId("")
+        }}>
           <ProductForm
             onSuccess={handleProductCreated}
             onCancel={() => setShowCreateModal(false)}
+            editId={editId}
           />
         </Modal>
       )}

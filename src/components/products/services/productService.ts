@@ -1,31 +1,15 @@
+import api from "../../../lib/axios.config";
 import type {
   CreateBundleProduct,
   CreateSimpleProduct,
   CreateVariableProduct,
   Product,
-} from "../types/product";
-
-const API_URL = "https://smart-store-production-e7e1.up.railway.app";
-
-function getAuthHeaders(): HeadersInit {
-  const token = localStorage.getItem("accessToken");
-
-  if (!token) {
-    throw new Error("No hay una sesión activa.");
-  }
-
-  return {
-    "Content-Type": "application/json",
-    Authorization: `Bearer ${token}`,
-  };
-}
+} from "../types";
 
 export async function getProducts(): Promise<Product[]> {
-  const response = await fetch(`${API_URL}/products`, {
-    headers: getAuthHeaders(),
-  });
+  const response = await api.get(`/products`);
 
-  if (!response.ok) {
+  if (!response.data) {
     if (response.status === 401) {
       throw new Error("La sesión expiró. Volvé a iniciar sesión.");
     }
@@ -33,23 +17,19 @@ export async function getProducts(): Promise<Product[]> {
     throw new Error(`Error al obtener productos: ${response.status}`);
   }
 
-  return response.json() as Promise<Product[]>;
+  return response.data as Promise<Product[]>;
 }
 
 export async function createProduct(
   productData: CreateSimpleProduct | CreateVariableProduct | CreateBundleProduct
 ): Promise<Product> {
-  const response = await fetch(`${API_URL}/products`, {
-    method: "POST",
-    headers: getAuthHeaders(),
-    body: JSON.stringify(productData),
-  });
+  const response = await api.post(`/products`, productData);
 
-  if (!response.ok) {
+  if (!response.data) {
     let errorMessage = `Error al crear producto: ${response.status}`;
 
     try {
-      const errorData = await response.json();
+      const errorData = await response.data;
 
       if (errorData?.message) {
         errorMessage = errorData.message;
@@ -69,5 +49,5 @@ export async function createProduct(
     throw new Error(errorMessage);
   }
 
-  return response.json() as Promise<Product>;
+  return response.data as Promise<Product>;
 }

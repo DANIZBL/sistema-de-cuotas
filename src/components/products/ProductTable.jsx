@@ -1,6 +1,6 @@
 import "./ProductTable.css";
 
-function ProductTable({ products }) {
+function ProductTable({ products, setEditId }) {
   function formatPrice(price) {
     if (price === null || price === undefined) {
       return "-";
@@ -132,7 +132,14 @@ function ProductTable({ products }) {
                 </td>
 
                 <td>
-                  <button className="product-menu">⋮</button>
+                  <button
+                    onClick={() => {
+                      setEditId(product.id)
+                    }}
+                    className="product-menu"
+                  >
+                    ⋮
+                  </button>
                 </td>
               </tr>
             );
