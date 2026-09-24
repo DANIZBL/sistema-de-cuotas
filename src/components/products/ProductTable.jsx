@@ -63,6 +63,7 @@ function ProductTable({ products, setEditId }) {
           <tr>
             <th>Producto</th>
             <th>Tipo</th>
+            <th>Categoría</th>
             <th>Precio</th>
             <th>SKUs</th>
             <th>Stock</th>
@@ -76,7 +77,6 @@ function ProductTable({ products, setEditId }) {
             const stock = getStock(product);
 
             const price = getPrice(product);
-
             return (
               <tr key={product.id}>
                 <td>
@@ -103,6 +103,12 @@ function ProductTable({ products, setEditId }) {
                 <td>
                   <span className={`type-badge type-${product.type}`}>
                     {getTypeLabel(product.type)}
+                  </span>
+                </td>
+
+                <td>
+                  <span className={`type-badge type-${product.type}`}>
+                    {product.categories.map(category => category.name)}
                   </span>
                 </td>
 
