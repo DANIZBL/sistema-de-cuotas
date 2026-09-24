@@ -6,7 +6,7 @@ import Products from "./pages/Products";
 import Login from "./pages/Login/Login";
 
 import "./App.css";
-import { Route, Routes } from "react-router";
+import { Route, Routes, useLocation, useNavigate } from "react-router";
 import Categories from "./pages/Categories";
 
 function App() {
@@ -25,26 +25,29 @@ function App() {
     }
   });
 
+  const { pathname } = useLocation()
+  const navigate = useNavigate()
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   function handleLogin(loggedUser) {
     setUser(loggedUser);
-  }
-
-  if (!user) {
-    return <Login onLogin={handleLogin} />;
+    navigate("/productos")
   }
 
   return (
     <div className="admin-layout">
-      <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
+      {pathname != "/" &&
+        <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
+      }
 
       <div className="admin-main">
-        <Header onMenuClick={() => setSidebarOpen(true)} />
-
-        <main className="admin-content">
+        {pathname != "/" &&
+          <Header onMenuClick={() => setSidebarOpen(true)} />
+        }
+        <main className={`${pathname != "/" && "admin-content"}`}>
           <Routes>
-            <Route path="/" element={<Products />} />
+            <Route path="/" element={<Login onLogin={handleLogin} />} />
+            <Route path="/productos" element={<Products />} />
             <Route path="/categorias" element={<Categories />} />
           </Routes>
         </main>

@@ -23,7 +23,7 @@ function Sidebar({ isOpen, onClose }) {
         <nav className="sidebar-nav">
           <p className="sidebar-section-title">GESTIÓN</p>
 
-          <NavLink to={"/"}>
+          <NavLink to={"/productos"}>
             {({ isActive }) => (
               <button className={`sidebar-item ${isActive ? "active" : ""}`}>
                 <span className="sidebar-icon">📦</span>
