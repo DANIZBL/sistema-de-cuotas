@@ -23,7 +23,7 @@ function ProductForm({ onSuccess, onCancel, editId }: ProductFormProps) {
   } = useProducts(editId)
 
   return (
-    <form className="product-form" onSubmit={(event) => handleSubmit({ event, form, onSuccess, setError, setLoading })}>
+    <form className="product-form" onSubmit={(event) => handleSubmit({ event, form, onSuccess, setError, setLoading, editId })}>
       {/* =========================
           INFORMACIÓN GENERAL
       ========================= */}
@@ -86,33 +86,34 @@ function ProductForm({ onSuccess, onCancel, editId }: ProductFormProps) {
         </div>
 
         <div className="form-group">
-          <label htmlFor="product-description">Categoría</label>
+          <label htmlFor="product-category-0">Categoría</label>
 
-          {form.categories.map((cat, i) =>
+          {form.categories.map((selected, i) =>
             <select
-              id="product-type"
-              onChange={(e) => setForm((current) => {
-                const currentCategory = current.categories[i]
-                currentCategory.id = e.target.value
-                return {
-                  ...current,
-                  categories: [...current.categories],
-                }
-              })
-              }
+              key={i}
+              id={`product-category-${i}`}
+              value={selected.id}
+              onChange={(e) => setForm((current) => ({
+                ...current,
+                categories: current.categories.map((c, j) =>
+                  j === i ? { ...c, id: e.target.value } : c
+                ),
+              }))}
               disabled={loading}
             >
-              <option></option>
+              <option value="">Seleccionar categoría</option>
               {categories.map(cat =>
-                <option value={cat.id}>{cat.name}</option>
+                <option key={cat.id} value={cat.id}>{cat.name}</option>
               )}
             </select>
           )}
           <button
+            type="button"
             className="add-image-button"
+            disabled={loading}
             onClick={() => setForm(prev => ({
               ...prev,
-              categories: [...prev.categories, { id: crypto.randomUUID() }]
+              categories: [...prev.categories, { id: "" }]
             }))}
           > + Categoría</button>
         </div>
@@ -603,7 +604,7 @@ function ProductForm({ onSuccess, onCancel, editId }: ProductFormProps) {
       {
         error && (
           <div className="form-error">
-            <strong>No se pudo crear el producto</strong>
+            <strong>{editId ? "No se pudo editar el producto" : "No se pudo crear el producto"}</strong>
 
             <span>{error}</span>
           </div>
@@ -621,7 +622,7 @@ function ProductForm({ onSuccess, onCancel, editId }: ProductFormProps) {
         </button>
 
         <button type="submit" className="submit-button" disabled={loading}>
-          {loading ? "Creando producto..." : "Crear producto"}
+          {!editId ? (loading ? "Creando producto..." : "Crear producto") : (loading ? "Editando producto..." : "Editar producto")}
         </button>
       </div>
     </form >

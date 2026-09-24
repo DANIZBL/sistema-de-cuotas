@@ -56,8 +56,13 @@ function Products() {
     });
   }, [products, search, typeFilter]);
 
-  function handleProductCreated() {
+  function closeModal() {
     setShowCreateModal(false);
+    setEditId("");
+  }
+
+  function handleProductCreated() {
+    closeModal();
 
     loadProducts();
   }
@@ -97,13 +102,10 @@ function Products() {
       />
 
       {(showCreateModal || editId) && (
-        <Modal title="Nuevo producto" onClose={() => {
-          setShowCreateModal(false)
-          setEditId("")
-        }}>
+        <Modal title={editId ? "Editar producto" : "Nuevo producto"} onClose={closeModal}>
           <ProductForm
             onSuccess={handleProductCreated}
-            onCancel={() => setShowCreateModal(false)}
+            onCancel={closeModal}
             editId={editId}
           />
         </Modal>

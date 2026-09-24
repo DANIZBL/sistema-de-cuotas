@@ -20,7 +20,7 @@ export default function useProducts(editId?: string) {
         imageFiles: [],
         variants: [createEmptyVariant()],
         components: [createEmptyComponent()],
-        categories: [{ id: crypto.randomUUID() }]
+        categories: [{ id: "" }]
     });
 
     const [products, setProducts] = useState<Product[]>([]);

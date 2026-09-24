@@ -1,3 +1,4 @@
+import api from "../../../lib/axios.config"
 import { uploadProductImage } from "../../../services/imageService"
 import { ProductFormState } from "../types"
 import { CreateBundleProduct, CreateSimpleProduct, CreateVariableProduct } from "../types"
@@ -10,7 +11,8 @@ interface Props {
     setError: React.Dispatch<React.SetStateAction<string>>
     event: React.FormEvent<HTMLFormElement>
     form: ProductFormState
-    onSuccess: () => void
+    onSuccess: () => void,
+    editId?: string
 }
 
 export async function handleSubmit({
@@ -18,7 +20,8 @@ export async function handleSubmit({
     setError,
     setLoading,
     form,
-    onSuccess
+    onSuccess,
+    editId
 }: Props) {
     event.preventDefault();
 
@@ -63,8 +66,10 @@ export async function handleSubmit({
             productData = buildBundlePayload(imageUrls, form);
         }
 
-        await createProduct(productData);
-
+        if (!editId)
+            await createProduct(productData);
+        else
+            api.put(`products/${editId}`, productData)
         onSuccess();
     } catch (error) {
 
