@@ -40,7 +40,7 @@ function App() {
         <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
       }
 
-      <div className="admin-main">
+      <div className={`${pathname != "/" && "admin-main"}`}>
         {pathname != "/" &&
           <Header onMenuClick={() => setSidebarOpen(true)} />
         }
