@@ -1,6 +1,18 @@
 import "./Sidebar.css";
 
-function Sidebar({ isOpen, onClose }) {
+interface SidebarProps {
+  isOpen: boolean;
+  onClose: () => void;
+  currentPage: string;
+  onNavigate: (page: string) => void;
+}
+
+function Sidebar({ isOpen, onClose, currentPage, onNavigate }: SidebarProps) {
+  function handleNavigate(page: string) {
+    onNavigate(page);
+    onClose();
+  }
+
   return (
     <>
       {isOpen && <div className="sidebar-overlay" onClick={onClose} />}
@@ -22,17 +34,30 @@ function Sidebar({ isOpen, onClose }) {
         <nav className="sidebar-nav">
           <p className="sidebar-section-title">GESTIÓN</p>
 
-          <button className="sidebar-item active">
+          <button
+            className={`sidebar-item ${
+              currentPage === "products" ? "active" : ""
+            }`}
+            onClick={() => handleNavigate("products")}
+          >
             <span className="sidebar-icon">📦</span>
             Productos
           </button>
 
-          <button className="sidebar-item">
+          <button
+            className={`sidebar-item ${
+              currentPage === "cuotas" ? "active" : ""
+            }`}
+            onClick={() => handleNavigate("cuotas")}
+          >
             <span className="sidebar-icon">💳</span>
             Cuotas
           </button>
 
-          <button className="sidebar-item">
+          <button
+            className="sidebar-item"
+            onClick={() => handleNavigate("clientes")}
+          >
             <span className="sidebar-icon">👥</span>
             Clientes
           </button>
