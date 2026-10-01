@@ -1,3 +1,4 @@
+import { NavLink } from "react-router";
 import "./Sidebar.css";
 
 interface SidebarProps {
@@ -34,33 +35,41 @@ function Sidebar({ isOpen, onClose, currentPage, onNavigate }: SidebarProps) {
         <nav className="sidebar-nav">
           <p className="sidebar-section-title">GESTIÓN</p>
 
-          <button
-            className={`sidebar-item ${
-              currentPage === "products" ? "active" : ""
-            }`}
-            onClick={() => handleNavigate("products")}
-          >
-            <span className="sidebar-icon">📦</span>
-            Productos
-          </button>
+          <NavLink to={"/productos"}>
+            {({ isActive }) => (
+              <button className={`sidebar-item ${isActive ? "active" : ""}`}>
+                <span className="sidebar-icon">📦</span>
+                Productos
+              </button>
+            )}
+          </NavLink>
 
-          <button
-            className={`sidebar-item ${
-              currentPage === "cuotas" ? "active" : ""
-            }`}
-            onClick={() => handleNavigate("cuotas")}
-          >
-            <span className="sidebar-icon">💳</span>
-            Cuotas
-          </button>
+          <NavLink to={"/categorias"}>
+            {({ isActive }) => (
+              <button className={`sidebar-item ${isActive ? "active" : ""}`}>
+                <span className="sidebar-icon">📋</span>
+                Categorías
+              </button>
+            )}
+          </NavLink>
 
-          <button
-            className="sidebar-item"
-            onClick={() => handleNavigate("clientes")}
-          >
-            <span className="sidebar-icon">👥</span>
-            Clientes
-          </button>
+          <NavLink to={"/cuotas"}>
+            {({ isActive }) => (
+              <button className={`sidebar-item ${isActive ? "active" : ""}`}>
+                <span className="sidebar-icon">💳</span>
+                Cuotas
+              </button>
+            )}
+          </NavLink>
+
+          <NavLink to={"/clientes"}>
+            {({ isActive }) => (
+              <button className={`sidebar-item ${isActive ? "active" : ""}`}>
+                <span className="sidebar-icon">👥</span>
+                Clientes
+              </button>
+            )}
+          </NavLink>
 
           <p className="sidebar-section-title">SISTEMA</p>
 

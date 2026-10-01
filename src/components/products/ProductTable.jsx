@@ -1,6 +1,6 @@
 import "./ProductTable.css";
 
-function ProductTable({ products }) {
+function ProductTable({ products, setEditId }) {
   function formatPrice(price) {
     if (price === null || price === undefined) {
       return "-";
@@ -63,6 +63,7 @@ function ProductTable({ products }) {
           <tr>
             <th>Producto</th>
             <th>Tipo</th>
+            <th>Categoría</th>
             <th>Precio</th>
             <th>SKUs</th>
             <th>Stock</th>
@@ -76,7 +77,6 @@ function ProductTable({ products }) {
             const stock = getStock(product);
 
             const price = getPrice(product);
-
             return (
               <tr key={product.id}>
                 <td>
@@ -107,6 +107,12 @@ function ProductTable({ products }) {
                 </td>
 
                 <td>
+                  <span className={`type-badge type-${product.type}`}>
+                    {product.categories.map(category => category.name)}
+                  </span>
+                </td>
+
+                <td>
                   <strong>{formatPrice(price)}</strong>
                 </td>
 
@@ -132,7 +138,14 @@ function ProductTable({ products }) {
                 </td>
 
                 <td>
-                  <button className="product-menu">⋮</button>
+                  <button
+                    onClick={() => {
+                      setEditId(product.id)
+                    }}
+                    className="product-menu"
+                  >
+                    ⋮
+                  </button>
                 </td>
               </tr>
             );

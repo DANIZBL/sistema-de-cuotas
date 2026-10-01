@@ -9,6 +9,8 @@ import Cuotas from "./pages/Cuotas/Cuotas";
 import Login from "./pages/Login/Login";
 
 import "./App.css";
+import { Route, Routes, useLocation, useNavigate } from "react-router";
+import Categories from "./pages/Categories";
 
 function App() {
   const [user, setUser] = useState(() => {
@@ -26,50 +28,33 @@ function App() {
     }
   });
 
+  const { pathname } = useLocation()
+  const navigate = useNavigate()
   const [sidebarOpen, setSidebarOpen] = useState(false);
-
-  const [currentPage, setCurrentPage] = useState("products");
 
   function handleLogin(loggedUser) {
     setUser(loggedUser);
-  }
-
-  if (!user) {
-    return <Login onLogin={handleLogin} />;
-  }
-
-  function renderPage() {
-    switch (currentPage) {
-      case "cuotas":
-        return <Cuotas />;
-
-      case "clientes":
-        return (
-          <div>
-            <h1>Clientes</h1>
-            <p>Esta sección la vamos a desarrollar próximamente.</p>
-          </div>
-        );
-
-      case "products":
-      default:
-        return <Products />;
-    }
+    navigate("/productos")
   }
 
   return (
     <div className="admin-layout">
-      <Sidebar
-        isOpen={sidebarOpen}
-        onClose={() => setSidebarOpen(false)}
-        currentPage={currentPage}
-        onNavigate={setCurrentPage}
-      />
+      {pathname != "/" &&
+        <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
+      }
 
-      <div className="admin-main">
-        <Header onMenuClick={() => setSidebarOpen(true)} />
-
-        <main className="admin-content">{renderPage()}</main>
+      <div className={`${pathname != "/" && "admin-main"}`}>
+        {pathname != "/" &&
+          <Header onMenuClick={() => setSidebarOpen(true)} />
+        }
+        <main className={`${pathname != "/" && "admin-content"}`}>
+          <Routes>
+            <Route path="/" element={<Login onLogin={handleLogin} />} />
+            <Route path="/productos" element={<Products />} />
+            <Route path="/categorias" element={<Categories />} />
+            <Route path="/cuotas" element={<Cuotas />} />
+          </Routes>
+        </main>
       </div>
     </div>
   );
