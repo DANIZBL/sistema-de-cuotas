@@ -2,7 +2,10 @@ import { useState } from "react";
 
 import Sidebar from "./components/layout/Sidebar";
 import Header from "./components/layout/Header";
+
 import Products from "./pages/Products";
+import Cuotas from "./pages/Cuotas/Cuotas";
+
 import Login from "./pages/Login/Login";
 
 import "./App.css";
@@ -49,6 +52,7 @@ function App() {
             <Route path="/" element={<Login onLogin={handleLogin} />} />
             <Route path="/productos" element={<Products />} />
             <Route path="/categorias" element={<Categories />} />
+            <Route path="/cuotas" element={<Cuotas />} />
           </Routes>
         </main>
       </div>

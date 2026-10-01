@@ -1,7 +1,19 @@
 import { NavLink } from "react-router";
 import "./Sidebar.css";
 
-function Sidebar({ isOpen, onClose }) {
+interface SidebarProps {
+  isOpen: boolean;
+  onClose: () => void;
+  currentPage: string;
+  onNavigate: (page: string) => void;
+}
+
+function Sidebar({ isOpen, onClose, currentPage, onNavigate }: SidebarProps) {
+  function handleNavigate(page: string) {
+    onNavigate(page);
+    onClose();
+  }
+
   return (
     <>
       {isOpen && <div className="sidebar-overlay" onClick={onClose} />}
