@@ -1,3 +1,4 @@
+import api from "../lib/axios.config";
 import type { Order } from "../types/order";
 
 const API_URL = "https://smart-store-production-e7e1.up.railway.app";
@@ -16,23 +17,18 @@ function getAuthHeaders(): HeadersInit {
 }
 
 export async function getOrders(): Promise<Order[]> {
-  const response = await fetch(`${API_URL}/orders`, {
-    headers: getAuthHeaders(),
-  });
+  const response = await api.get(`/orders`);
 
-  if (!response.ok) {
-    if (response.status === 401) {
-      throw new Error("La sesión expiró. Volvé a iniciar sesión.");
-    }
-
+  if (response.status === 401) {
+    throw new Error("La sesión expiró. Volvé a iniciar sesión.");
+  }
+  else if (response.status != 200) {
     throw new Error(`Error al obtener órdenes: ${response.status}`);
   }
 
-  const data = await response.json();
+  const data = await response.data;
 
-  console.log("Respuesta real de /orders:", JSON.stringify(data, null, 2));
-
-  return data as Order[];
+  return data;
 }
 
 export async function getOrderById(orderId: string): Promise<Order> {
