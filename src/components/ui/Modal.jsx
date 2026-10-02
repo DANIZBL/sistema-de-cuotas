@@ -1,25 +1,58 @@
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 
 import "./Modal.css";
 
-function Modal({ title, children, onClose }) {
+// Pila de modales abiertas, compartida entre todas las instancias.
+// La última del array es la que está arriba de todo.
+const openModals = [];
+
+let previousBodyOverflow = "";
+
+function Modal({ title, children, onClose, className = "" }) {
+  const onCloseRef = useRef(onClose);
+
   useEffect(() => {
+    onCloseRef.current = onClose;
+  });
+
+  useEffect(() => {
+    const modalId = {};
+
+    // Solo la primera modal bloquea el scroll del body.
+    if (openModals.length === 0) {
+      previousBodyOverflow = document.body.style.overflow;
+      document.body.style.overflow = "hidden";
+    }
+
+    openModals.push(modalId);
+
     function handleEscape(event) {
-      if (event.key === "Escape") {
-        onClose();
+      // Solo se cierra la modal que está arriba de todo.
+      if (
+        event.key === "Escape" &&
+        openModals[openModals.length - 1] === modalId
+      ) {
+        onCloseRef.current();
       }
     }
 
     document.addEventListener("keydown", handleEscape);
 
-    document.body.style.overflow = "hidden";
-
     return () => {
       document.removeEventListener("keydown", handleEscape);
 
-      document.body.style.overflow = "";
+      const index = openModals.indexOf(modalId);
+
+      if (index !== -1) {
+        openModals.splice(index, 1);
+      }
+
+      // Solo la última modal en cerrarse restaura el scroll del body.
+      if (openModals.length === 0) {
+        document.body.style.overflow = previousBodyOverflow;
+      }
     };
-  }, [onClose]);
+  }, []);
 
   return (
     <div
@@ -30,11 +63,16 @@ function Modal({ title, children, onClose }) {
         }
       }}
     >
-      <div className="modal">
+      <div className={`modal ${className}`}>
         <div className="modal-header">
           <h2>{title}</h2>
 
-          <button className="modal-close" onClick={onClose}>
+          <button
+            type="button"
+            className="modal-close"
+            aria-label="Cerrar"
+            onClick={onClose}
+          >
             ×
           </button>
         </div>
