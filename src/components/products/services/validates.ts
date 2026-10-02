@@ -1,5 +1,12 @@
 import { ProductFormState } from "../types";
 
+// Vacío es válido (se envía null)
+function isValidBattery(battery: string) {
+    if (battery === "") return true;
+    const value = Number(battery);
+    return Number.isInteger(value) && value >= 0 && value <= 100;
+}
+
 export function validateSimple(form: ProductFormState): string {
     if (!form.name.trim()) {
         return "El nombre del producto es obligatorio.";
@@ -23,6 +30,10 @@ export function validateSimple(form: ProductFormState): string {
 
     if (form.discountedPrice !== "" && Number(form.discountedPrice) < 0) {
         return "El precio promocional no puede ser negativo.";
+    }
+
+    if (!isValidBattery(form.battery)) {
+        return "La batería tiene que ser un número entero entre 0 y 100.";
     }
 
     return "";
@@ -91,6 +102,10 @@ export function validateVariable(form: ProductFormState): string {
         ) {
             return `El precio promocional de la variante ${variantIndex + 1
                 } no puede ser negativo.`;
+        }
+
+        if (!isValidBattery(variant.battery)) {
+            return `La batería de la variante ${variantIndex + 1} tiene que ser un número entero entre 0 y 100.`;
         }
     }
 

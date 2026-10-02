@@ -8,8 +8,8 @@ function Header({ onMenuClick }) {
       </button>
 
       <div>
-        <h1>Productos</h1>
-        <p>Gestioná los productos de tu empresa</p>
+        <h1>Smart Store</h1>
+        <p>Gestioná los productos y ordenes de tu empresa</p>
       </div>
 
       <div className="header-user">

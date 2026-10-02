@@ -30,7 +30,6 @@ function Login({ onLogin }) {
 
       onLogin(data.user);
     } catch (error) {
-
       setError(error.message || "No se pudo iniciar sesión.");
     } finally {
       setLoading(false);
@@ -48,7 +47,7 @@ function Login({ onLogin }) {
           <p>Iniciá sesión para acceder al panel de administración.</p>
         </div>
 
-        <form className="login-form" onSubmit={handleSubmit}>
+        <form className="login-form" onSubmit={(e) => handleSubmit(e)}>
           <div className="login-field">
             <label htmlFor="email">Email</label>
 

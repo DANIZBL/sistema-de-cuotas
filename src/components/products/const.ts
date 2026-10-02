@@ -10,6 +10,8 @@ export const createEmptyVariant = (): VariableForm => ({
     price: "",
     discountedPrice: "",
     stock: "",
+    battery: "",
+    condition: "",
 });
 
 export const createEmptyComponent = (): BundleComponentForm => ({

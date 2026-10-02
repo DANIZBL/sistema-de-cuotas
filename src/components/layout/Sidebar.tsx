@@ -1,7 +1,12 @@
 import { NavLink } from "react-router";
 import "./Sidebar.css";
 
-function Sidebar({ isOpen, onClose }) {
+interface SidebarProps {
+  isOpen: boolean;
+  onClose: () => void;
+}
+
+function Sidebar({ isOpen, onClose }: SidebarProps) {
   return (
     <>
       {isOpen && <div className="sidebar-overlay" onClick={onClose} />}
@@ -23,7 +28,7 @@ function Sidebar({ isOpen, onClose }) {
         <nav className="sidebar-nav">
           <p className="sidebar-section-title">GESTIÓN</p>
 
-          <NavLink to={"/"}>
+          <NavLink to={"/productos"}>
             {({ isActive }) => (
               <button className={`sidebar-item ${isActive ? "active" : ""}`}>
                 <span className="sidebar-icon">📦</span>
@@ -41,11 +46,11 @@ function Sidebar({ isOpen, onClose }) {
             )}
           </NavLink>
 
-          <NavLink to={"/cuotas"}>
+          <NavLink to={"/ordenes"}>
             {({ isActive }) => (
               <button className={`sidebar-item ${isActive ? "active" : ""}`}>
                 <span className="sidebar-icon">💳</span>
-                Cuotas
+                Ordenes
               </button>
             )}
           </NavLink>

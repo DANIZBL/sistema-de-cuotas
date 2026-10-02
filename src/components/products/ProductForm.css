@@ -434,12 +434,42 @@
 }
 
 /* =========================
+   ESTADO DEL EQUIPO
+========================= */
+
+.condition-grid {
+  grid-template-columns: repeat(2, 1fr);
+}
+
+/* Input con "%" fijo a la derecha */
+
+.input-suffix {
+  position: relative;
+}
+
+.input-suffix input {
+  padding-right: 34px;
+}
+
+.input-suffix span {
+  position: absolute;
+  top: 50%;
+  right: 12px;
+  transform: translateY(-50%);
+  color: #9ca3af;
+  font-size: 13px;
+  font-weight: 600;
+  pointer-events: none;
+}
+
+/* =========================
    RESPONSIVE
 ========================= */
 
 @media (max-width: 650px) {
 
   .form-grid,
+  .condition-grid,
   .variant-price-grid {
     grid-template-columns: 1fr;
   }

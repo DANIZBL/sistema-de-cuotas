@@ -1,10 +1,12 @@
 import BaseTable from "../components/BaseTable";
 import SubHeaderComponent from "../components/SearchAndNewButton";
+import { getCategories } from "../components/categories/api/api.services";
 import loadCategories from "../components/categories/services/loadCategories";
 import CreateCategory from "../components/categories/ui/createCategory";
 import CategoriesTable from "../components/categories/ui/table";
 import useCategoreisHook from "../components/categories/useCategoriesHook";
 import Modal from "../components/ui/Modal";
+import { LoadersTexts } from "../types/enums";
 
 export default function Categories() {
     const {
@@ -28,7 +30,13 @@ export default function Categories() {
                 error={error}
                 filteredElement={categories}
                 loading={loader}
-                loadElements={() => loadCategories({ setCategories, setError, setLoader })}
+                loadElements={() => loadCategories({
+                    setElement: setCategories,
+                    getElements: getCategories,
+                    loadersTexts: LoadersTexts.CATEGORIES,
+                    setError,
+                    setLoader
+                })}
                 TableComponent={
                     <CategoriesTable
                         categories={categories}

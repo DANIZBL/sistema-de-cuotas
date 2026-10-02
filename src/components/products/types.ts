@@ -2,6 +2,11 @@ import { Category } from "../categories/api/types";
 
 export type ProductFormType = "simple" | "variable" | "bundle";
 
+export enum ProductCondition {
+    NUEVO = "nuevo",
+    USADO = "usado"
+}
+
 export interface AttributeForm {
     name: string;
     value: string;
@@ -12,6 +17,9 @@ export interface VariableForm {
     price: string;
     discountedPrice: string;
     stock: string;
+    // "" = sin dato, se envía como null
+    battery: string;
+    condition: ProductCondition | "";
 }
 
 export interface BundleComponentForm {
@@ -31,6 +39,9 @@ export interface ProductFormState {
     price: string;
     discountedPrice: string;
     stock: string;
+    // "" = sin dato, se envía como null
+    battery: string;
+    condition: ProductCondition | "";
     isPublished: boolean;
     imageFiles: Partial<ImageFile>[];
     variants: VariableForm[];
@@ -81,6 +92,8 @@ export interface SKU {
     price: number;
     discountedPrice: number;
     stock: number;
+    battery?: number | null;
+    condition?: ProductCondition | null;
     variantValues: VariantValue[];
     images: SKUImage[];
     components: Component[];
@@ -104,6 +117,8 @@ export interface CreateSimpleProduct {
     price: number;
     discountedPrice?: number;
     stock: number;
+    battery: number | null;
+    condition: ProductCondition | null;
     isPublished: boolean;
     categoryIds: string[];
     images: string[];
@@ -112,6 +127,8 @@ export interface CreateSimpleProduct {
 export interface CreateVariant {
     variant: Variant[];
     stock: number;
+    battery: number | null;
+    condition: ProductCondition | null;
     price?: number;
     discountedPrice?: number;
 }
@@ -154,6 +171,8 @@ export interface ProductApi {
             price: number,
             discountedPrice: null | number,
             stock: number,
+            battery?: number | null,
+            condition?: ProductCondition | null,
             variantValues: {
                 id: string,
                 variant: {

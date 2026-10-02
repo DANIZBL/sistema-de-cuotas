@@ -2,7 +2,7 @@ import { ProductFormState } from "../types";
 
 interface Props {
     setForm: React.Dispatch<React.SetStateAction<ProductFormState>>
-    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
 }
 
 export function handleChange({ event, setForm }: Props) {
