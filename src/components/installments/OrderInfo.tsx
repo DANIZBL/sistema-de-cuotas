@@ -1,7 +1,7 @@
 import { formatDate, formatPrice } from "../../lib/format";
 
 import { DeliveryMethod, OrderStatus } from "../../types/order";
-import type { Order } from "../../types/order";
+import type { Order, OrderItem } from "../../types/order";
 
 import "./OrderInfo.css";
 
@@ -18,6 +18,14 @@ export function getOrderStatus(order: Order) {
       label: order.status || "Sin estado",
     }
   );
+}
+
+// Valores de la variante del SKU, ej: "Rojo / M". "" si el producto no tiene variantes
+export function getItemVariantLabel(item: OrderItem) {
+  return (item.sku?.variantValues ?? [])
+    .map((variantValue) => variantValue.variant?.value)
+    .filter(Boolean)
+    .join(" / ");
 }
 
 interface OrderInfoProps {
@@ -93,9 +101,9 @@ export default function OrderInfo({ order }: OrderInfoProps) {
             const image =
               item.sku?.images?.[0]?.url ?? item.sku?.product?.images?.[0]?.url;
 
-            const variants = item.sku?.variantValues
-              ?.map((value) => `${value.variant.name}: ${value.variant.value}`)
-              .join(" · ");
+            const variantValues = (item.sku?.variantValues ?? []).filter(
+              (variantValue) => variantValue.variant
+            );
 
             const unitPrice = item.discounted_price ?? item.unit_price;
 
@@ -110,7 +118,17 @@ export default function OrderInfo({ order }: OrderInfoProps) {
                 <div className="order-info-product-name">
                   <strong>{item.sku?.product?.name || "Producto"}</strong>
 
-                  {variants && <small>{variants}</small>}
+                  {variantValues.length > 0 && (
+                    <div className="order-info-product-variants">
+                      {variantValues.map((variantValue) => (
+                        <span key={variantValue.id} className="order-info-variant-chip">
+                          {variantValue.variant.name}: <b>{variantValue.variant.value}</b>
+                        </span>
+                      ))}
+                    </div>
+                  )}
+
+                  {item.sku?.code && <small>SKU {item.sku.code}</small>}
                 </div>
 
                 <div className="order-info-product-numbers">

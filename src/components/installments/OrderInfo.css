@@ -101,3 +101,29 @@
     grid-template-columns: 1fr;
   }
 }
+
+/* VARIANTE DEL PRODUCTO (SKU) */
+
+.order-info-product-variants {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  margin-top: 2px;
+}
+
+.order-info-variant-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  padding: 3px 8px;
+  border: 1px solid #bfdbfe;
+  border-radius: 999px;
+  background: #eff6ff;
+  font-size: 11px;
+  color: #6b7280;
+}
+
+.order-info-variant-chip b {
+  font-weight: 600;
+  color: #1d4ed8;
+}

@@ -1,4 +1,4 @@
-import { getOrderStatus } from "../../components/installments/OrderInfo";
+import { getItemVariantLabel, getOrderStatus } from "../../components/installments/OrderInfo";
 import { Order } from "../../types/order";
 import "./Cuotas.css";
 
@@ -67,13 +67,21 @@ export default function TableOrders({ orders, handleSelectOrder, selectedOrder }
 
                                 <td>
                                     <ul className="orders-table-products">
-                                        {order.items.map((item) => (
-                                            <li key={item.id}>
-                                                {item.sku?.product?.name || "Producto"}
+                                        {order.items.map((item) => {
+                                            const variantLabel = getItemVariantLabel(item);
 
-                                                {item.quantity > 1 && <small> x{item.quantity}</small>}
-                                            </li>
-                                        ))}
+                                            return (
+                                                <li key={item.id}>
+                                                    {item.sku?.product?.name || "Producto"}
+
+                                                    {variantLabel && (
+                                                        <span className="orders-table-variant">{variantLabel}</span>
+                                                    )}
+
+                                                    {item.quantity > 1 && <small> x{item.quantity}</small>}
+                                                </li>
+                                            );
+                                        })}
                                     </ul>
                                 </td>
 

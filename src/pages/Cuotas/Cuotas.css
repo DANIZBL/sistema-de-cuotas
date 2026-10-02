@@ -139,6 +139,18 @@
   margin-top: 3px;
 }
 
+.orders-table-variant {
+  display: inline-block;
+  margin-left: 6px;
+  padding: 1px 7px;
+  border-radius: 999px;
+  background: #eff6ff;
+  font-size: 11px;
+  font-weight: 600;
+  color: #1d4ed8;
+  vertical-align: 1px;
+}
+
 .orders-table-products small {
   display: inline !important;
   font-weight: 600;
