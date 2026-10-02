@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useContext, useEffect, useMemo, useState } from "react";
 import ProductTable from "../components/products/ProductTable";
 import ProductForm from "../components/products/ProductForm";
 import Modal from "../components/ui/Modal";
@@ -8,9 +8,9 @@ import SubHeaderComponent from "../components/SearchAndNewButton";
 import { getProducts } from "../components/products/services/productService";
 import BaseTable from "../components/BaseTable";
 import { LoadersTexts } from "../types/enums";
+import { ProductsContext } from "../lib/contexts";
 
 function Products() {
-  const [products, setProducts] = useState([]);
 
   const [loading, setLoading] = useState(LoadersTexts.PRODUCTS);
 
@@ -27,6 +27,8 @@ function Products() {
   useEffect(() => {
     loadProducts();
   }, []);
+
+  const { products, setProducts } = useContext(ProductsContext);
 
   async function loadProducts() {
     try {

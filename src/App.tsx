@@ -4,6 +4,7 @@ import Sidebar from "./components/layout/Sidebar";
 import Header from "./components/layout/Header";
 
 import Products from "./pages/Products";
+import { Product, ProductApi } from "./components/products/types";
 
 import Login from "./pages/Login/Login";
 
@@ -11,6 +12,8 @@ import "./App.css";
 import { Route, Routes, useLocation, useNavigate } from "react-router";
 import Categories from "./pages/Categories";
 import Ordenes from "./pages/Cuotas/Ordenes";
+import { ProductsContext } from "./lib/contexts";
+import { User } from "./types/auth";
 
 function App() {
   const [user, setUser] = useState(() => {
@@ -32,7 +35,9 @@ function App() {
   const navigate = useNavigate()
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
-  function handleLogin(loggedUser) {
+  const [products, setProducts] = useState<Product[]>([]);
+
+  function handleLogin(loggedUser: User) {
     setUser(loggedUser);
     navigate("/productos")
   }
@@ -47,14 +52,16 @@ function App() {
         {pathname != "/" &&
           <Header onMenuClick={() => setSidebarOpen(true)} />
         }
-        <main className={`${pathname != "/" && "admin-content"}`}>
-          <Routes>
-            <Route path="/" element={<Login onLogin={handleLogin} />} />
-            <Route path="/productos" element={<Products />} />
-            <Route path="/categorias" element={<Categories />} />
-            <Route path="/ordenes" element={<Ordenes />} />
-          </Routes>
-        </main>
+        <ProductsContext value={{ products, setProducts }}>
+          <main className={`${pathname != "/" && "admin-content"}`}>
+            <Routes>
+              <Route path="/" element={<Login onLogin={handleLogin} />} />
+              <Route path="/productos" element={<Products />} />
+              <Route path="/categorias" element={<Categories />} />
+              <Route path="/ordenes" element={<Ordenes />} />
+            </Routes>
+          </main>
+        </ProductsContext>
       </div>
     </div>
   );

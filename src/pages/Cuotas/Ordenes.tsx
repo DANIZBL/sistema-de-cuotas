@@ -91,6 +91,18 @@ export default function Ordenes() {
         TableComponent={<TableOrders orders={orders} handleSelectOrder={handleSelectOrder} selectedOrder={selectedOrder} />}
       />
 
+      {showCreateModal && (
+        <Modal
+          title={`Crear orden`}
+          onClose={handleCloseModal}
+          className="order-detail-modal"
+        >
+          <form>
+
+          </form>
+        </Modal>
+      )}
+
       {selectedOrder && (
         <Modal
           title={`Orden #${selectedOrder.orderNumber || selectedOrder.id.slice(0, 8)}`}

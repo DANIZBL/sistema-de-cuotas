@@ -4,16 +4,9 @@ import "./Sidebar.css";
 interface SidebarProps {
   isOpen: boolean;
   onClose: () => void;
-  currentPage: string;
-  onNavigate: (page: string) => void;
 }
 
-function Sidebar({ isOpen, onClose, currentPage, onNavigate }: SidebarProps) {
-  function handleNavigate(page: string) {
-    onNavigate(page);
-    onClose();
-  }
-
+function Sidebar({ isOpen, onClose }: SidebarProps) {
   return (
     <>
       {isOpen && <div className="sidebar-overlay" onClick={onClose} />}
