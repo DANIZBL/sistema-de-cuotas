@@ -1,0 +1,134 @@
+.installment-table-scroll {
+  max-height: 380px;
+  overflow: auto;
+  border: 1px solid #e5e7eb;
+  border-radius: 9px;
+}
+
+.installment-table table {
+  width: 100%;
+  min-width: 820px;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+
+.installment-table th {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  padding: 10px 8px;
+  background: #f3f4f6;
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 1.3;
+  color: #374151;
+  text-align: left;
+  vertical-align: bottom;
+}
+
+.installment-table td {
+  padding: 11px 8px;
+  border-top: 1px solid #f0f0f0;
+  color: #374151;
+  white-space: nowrap;
+}
+
+.installment-table th:first-child,
+.installment-table td:first-child {
+  padding-left: 14px;
+}
+
+.installment-table th:last-child,
+.installment-table td:last-child {
+  padding-right: 14px;
+}
+
+.installment-table tbody tr:hover {
+  background: #fafafa;
+}
+
+.installment-table-number {
+  font-weight: 700;
+}
+
+.installment-table-period {
+  font-variant-numeric: tabular-nums;
+}
+
+.installment-badge {
+  display: inline-flex;
+  justify-content: center;
+  min-width: 75px;
+  padding: 5px 10px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.installment-badge-pending {
+  background: #fee2e2;
+  color: #dc2626;
+  border: 1px solid #fecaca;
+}
+
+.installment-badge-partial {
+  background: #fef3c7;
+  color: #d97706;
+  border: 1px solid #fde68a;
+}
+
+.installment-badge-paid {
+  background: #dcfce7;
+  color: #16a34a;
+  border: 1px solid #bbf7d0;
+}
+
+.installment-table-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 14px;
+  margin-top: 14px;
+}
+
+.installment-table-footer > div {
+  min-width: 150px;
+  padding: 10px 14px;
+  border-radius: 8px;
+  background: #dbeafe;
+}
+
+.installment-table-footer span {
+  display: block;
+  margin-bottom: 4px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #374151;
+}
+
+.installment-table-footer strong {
+  font-size: 15px;
+  color: #1f2937;
+}
+
+.installment-table-empty {
+  padding: 30px;
+  border: 1px dashed #d1d5db;
+  border-radius: 9px;
+  text-align: center;
+  color: #6b7280;
+}
+
+@media (max-width: 500px) {
+  .installment-table-footer {
+    flex-direction: column;
+  }
+}
+
+.installment-table tbody tr {
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.installment-table tbody tr:hover {
+  background: #eff6ff;
+}
