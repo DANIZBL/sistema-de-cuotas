@@ -1,5 +1,6 @@
 import { useLayoutEffect, useMemo, useRef, useState } from "react"
-import useCreateOrder from "./useCreateOrder"
+import useCreateOrder, { getSkuState } from "./useCreateOrder"
+import SkuStateBadges from "./SkuStateBadges"
 import style from "./CreateOrderForm.module.css"
 import Modal from "../ui/Modal"
 import { formatPrice } from "../../lib/format"
@@ -174,6 +175,7 @@ export default function CreateOrder({ onCreated }: Props) {
                             <ul className={style.pickerList}>
                                 {filteredProducts.map((product) => {
                                     const variantsCount = product.skus.filter((sku) => sku.variantValues.length > 0).length
+                                    const simpleState = product.skus.length === 1 ? getSkuState(product.skus[0]) : null
 
                                     return (
                                         <li key={product.id} className={style.pickerItem}>
@@ -184,6 +186,9 @@ export default function CreateOrder({ onCreated }: Props) {
                                                         ? `${variantsCount} ${variantsCount === 1 ? "variante" : "variantes"}`
                                                         : `${formatPrice(product.skus[0]?.price)}`}
                                                 </small>
+                                                {simpleState && (
+                                                    <SkuStateBadges condition={simpleState.condition} battery={simpleState.battery} />
+                                                )}
                                             </div>
 
                                             <button

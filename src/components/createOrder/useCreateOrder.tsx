@@ -1,6 +1,7 @@
 import { useContext, useMemo, useState } from "react";
 import { ProductsContext } from "../../lib/contexts";
-import type { Product } from "../products/types";
+import { ProductCondition } from "../products/types";
+import type { Product, SKU } from "../products/types";
 import { Currency } from "../../types/order";
 
 export interface ProductVariantOption {
@@ -8,7 +9,10 @@ export interface ProductVariantOption {
     label: string,
     code: string,
     price: number,
-    stock: number
+    stock: number,
+    condition: ProductCondition | null,
+    // Ya resuelta: un nuevo sin batería cargada se toma como 100%
+    battery: number | null
 }
 
 export interface ProductToOrder {
@@ -27,6 +31,21 @@ export function hasVariants(product: ProductToOrder) {
     return product.variants.length > 1 || product.variants[0]?.label !== ""
 }
 
+// Si es nuevo y no tiene batería cargada, se da por sentado que está al 100%
+export function getSkuState(sku: Pick<SKU, "condition" | "battery">) {
+    const condition = sku.condition ?? null
+    const battery = sku.battery ?? (condition === ProductCondition.NUEVO ? 100 : null)
+    return { condition, battery }
+}
+
+// "Usado · 87%", "Nuevo · 100%", "" si no tiene datos
+export function getSkuStateLabel(state: { condition: ProductCondition | null, battery: number | null }) {
+    return [
+        state.condition === ProductCondition.NUEVO ? "Nuevo" : state.condition === ProductCondition.USADO ? "Usado" : "",
+        state.battery != null ? `${state.battery}%` : ""
+    ].filter(Boolean).join(" · ")
+}
+
 function toProductToOrder(product: Product): ProductToOrder {
     const variants = product.skus.map((sku) => ({
         sku_id: sku.id,
@@ -37,7 +56,8 @@ function toProductToOrder(product: Product): ProductToOrder {
             .join(" / "),
         code: sku.code,
         price: sku.price,
-        stock: sku.stock
+        stock: sku.stock,
+        ...getSkuState(sku)
     }))
 
     const firstAvailable = variants.find((variant) => variant.stock > 0) ?? variants[0]

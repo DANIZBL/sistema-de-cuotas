@@ -1,4 +1,5 @@
-import { hasVariants, ProductToOrder } from "./useCreateOrder"
+import { getSkuStateLabel, hasVariants, ProductToOrder } from "./useCreateOrder"
+import SkuStateBadges from "./SkuStateBadges"
 import style from "./CreateOrderForm.module.css"
 import { formatPrice } from "../../lib/format"
 
@@ -48,9 +49,12 @@ export default function ProductsSection({
                                     <div>
                                         <strong>{product.name}</strong>
                                         {selected && (
-                                            <small>
-                                                SKU {selected.code} · Stock: {selected.stock}
-                                            </small>
+                                            <>
+                                                <SkuStateBadges condition={selected.condition} battery={selected.battery} />
+                                                <small>
+                                                    SKU {selected.code} · Stock: {selected.stock}
+                                                </small>
+                                            </>
                                         )}
                                     </div>
                                     <button
@@ -79,6 +83,7 @@ export default function ProductsSection({
                                                         disabled={variant.stock <= 0}
                                                     >
                                                         {variant.label || variant.code}
+                                                        {getSkuStateLabel(variant) ? ` — ${getSkuStateLabel(variant)}` : ""}
                                                         {variant.stock <= 0 ? " (sin stock)" : ""}
                                                     </option>
                                                 ))}
