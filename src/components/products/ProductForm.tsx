@@ -10,7 +10,7 @@ import { handleSubmit } from "./services/submit";
 import { addAttribute, removeAttribute, updateAttribute } from "./services/updateAttribute";
 import { addComponent, removeComponent, updateComponent } from "./services/updateComponent";
 import { addVariant, removeVariant, updateVariant } from "./services/updateVariant";
-import { ProductFormProps } from "./types";
+import { ProductCondition, ProductFormProps } from "./types";
 
 function ProductForm({ onSuccess, onCancel, editId }: ProductFormProps) {
   const {
@@ -179,6 +179,52 @@ function ProductForm({ onSuccess, onCancel, editId }: ProductFormProps) {
                     disabled={loading}
                     required
                   />
+                </div>
+              </div>
+            </div>
+
+            <div className="form-section">
+              <div className="form-section-title">
+                <h3>Estado del equipo</h3>
+
+                <p>Opcional. Dejalo vacío si no aplica.</p>
+              </div>
+
+              <div className="form-grid condition-grid">
+                <div className="form-group">
+                  <label htmlFor="product-condition">Condición</label>
+
+                  <select
+                    id="product-condition"
+                    name="condition"
+                    value={form.condition}
+                    onChange={(e) => handleChange({ event: e, setForm })}
+                    disabled={loading}
+                  >
+                    <option value="">Sin especificar</option>
+                    <option value={ProductCondition.NUEVO}>Nuevo</option>
+                    <option value={ProductCondition.USADO}>Usado</option>
+                  </select>
+                </div>
+
+                <div className="form-group">
+                  <label htmlFor="product-battery">Batería %</label>
+
+                  <div className="input-suffix">
+                    <input
+                      id="product-battery"
+                      type="number"
+                      name="battery"
+                      placeholder="Ej: 87"
+                      value={form.battery}
+                      onChange={(e) => handleChange({ event: e, setForm })}
+                      min="0"
+                      max="100"
+                      step="1"
+                      disabled={loading}
+                    />
+                    <span>%</span>
+                  </div>
                 </div>
               </div>
             </div>
@@ -374,6 +420,58 @@ function ProductForm({ onSuccess, onCancel, editId }: ProductFormProps) {
                           }
                           disabled={loading}
                         />
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="variant-commercial">
+                    <div className="variant-subtitle">Estado del equipo (opcional)</div>
+
+                    <div className="form-grid condition-grid">
+                      <div className="form-group">
+                        <label>Condición</label>
+
+                        <select
+                          value={variant.condition}
+                          onChange={(event) =>
+                            updateVariant({
+                              variantIndex,
+                              field: "condition",
+                              value: event.target.value,
+                              setForm
+                            })
+                          }
+                          disabled={loading}
+                        >
+                          <option value="">Sin especificar</option>
+                          <option value={ProductCondition.NUEVO}>Nuevo</option>
+                          <option value={ProductCondition.USADO}>Usado</option>
+                        </select>
+                      </div>
+
+                      <div className="form-group">
+                        <label>Batería %</label>
+
+                        <div className="input-suffix">
+                          <input
+                            type="number"
+                            placeholder="Ej: 87"
+                            min="0"
+                            max="100"
+                      step="1"
+                            value={variant.battery}
+                            onChange={(event) =>
+                              updateVariant({
+                                variantIndex,
+                                field: "battery",
+                                value: event.target.value,
+                                setForm
+                              })
+                            }
+                            disabled={loading}
+                          />
+                          <span>%</span>
+                        </div>
                       </div>
                     </div>
                   </div>

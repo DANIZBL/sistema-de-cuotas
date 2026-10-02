@@ -16,6 +16,8 @@ export default function useProducts(editId?: string) {
         price: "",
         discountedPrice: "",
         stock: "",
+        battery: "",
+        condition: "",
         isPublished: true,
         imageFiles: [],
         variants: [createEmptyVariant()],
@@ -53,7 +55,9 @@ export default function useProducts(editId?: string) {
                                     })),
                                     price: String(sku.price),
                                     discountedPrice: String(sku.discountedPrice),
-                                    stock: String(sku.stock)
+                                    stock: String(sku.stock),
+                                    battery: sku.battery != null ? String(sku.battery) : "",
+                                    condition: sku.condition ?? ""
                                 })
                             for (const { componentSku } of sku.components) {
                                 components.push({ skuId: componentSku.id, quantity: String(sku.stock) })
@@ -69,6 +73,8 @@ export default function useProducts(editId?: string) {
                         stock: String(product.skus[0].stock),
                         price: String(product.skus[0].price),
                         discountedPrice: String(product.skus[0].discountedPrice),
+                        battery: product.skus[0].battery != null ? String(product.skus[0].battery) : "",
+                        condition: product.skus[0].condition ?? "",
                         description: product.description,
                         variants,
                         components
