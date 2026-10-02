@@ -4,13 +4,13 @@ import Sidebar from "./components/layout/Sidebar";
 import Header from "./components/layout/Header";
 
 import Products from "./pages/Products";
-import Cuotas from "./pages/Cuotas/Cuotas";
 
 import Login from "./pages/Login/Login";
 
 import "./App.css";
 import { Route, Routes, useLocation, useNavigate } from "react-router";
 import Categories from "./pages/Categories";
+import Ordenes from "./pages/Cuotas/Ordenes";
 
 function App() {
   const [user, setUser] = useState(() => {
@@ -52,7 +52,7 @@ function App() {
             <Route path="/" element={<Login onLogin={handleLogin} />} />
             <Route path="/productos" element={<Products />} />
             <Route path="/categorias" element={<Categories />} />
-            <Route path="/cuotas" element={<Cuotas />} />
+            <Route path="/ordenes" element={<Ordenes />} />
           </Routes>
         </main>
       </div>

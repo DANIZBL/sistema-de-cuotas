@@ -53,11 +53,11 @@ function Sidebar({ isOpen, onClose, currentPage, onNavigate }: SidebarProps) {
             )}
           </NavLink>
 
-          <NavLink to={"/cuotas"}>
+          <NavLink to={"/ordenes"}>
             {({ isActive }) => (
               <button className={`sidebar-item ${isActive ? "active" : ""}`}>
                 <span className="sidebar-icon">💳</span>
-                Cuotas
+                Ordenes
               </button>
             )}
           </NavLink>

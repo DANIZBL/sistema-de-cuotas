@@ -4,19 +4,21 @@ import { getCategories } from "../api/api.services";
 import { Category } from "../api/types";
 import { isAxiosError } from "axios";
 
-interface Props {
+interface Props<T> {
     setLoader: React.Dispatch<React.SetStateAction<string>>
     setError: React.Dispatch<React.SetStateAction<string>>
-    setCategories: React.Dispatch<React.SetStateAction<Category[]>>
+    setElement: React.Dispatch<React.SetStateAction<T[]>>
+    getElements: () => Promise<T[]>
+    loadersTexts: LoadersTexts
 }
 
-export default async function loadCategories({ setLoader, setError, setCategories }: Props) {
+export default async function loadElements<T>({ setLoader, setError, setElement, getElements, loadersTexts }: Props<T>) {
     try {
-        setLoader(LoadersTexts.PRODUCTS);
+        setLoader(loadersTexts);
         setError("");
-        const data = await getCategories();
+        const data = await getElements();
         if (data.length == 0) throw new Error("No se encontraron categorias")
-        setCategories(data);
+        setElement(data);
     } catch (error) {
         if (isAxiosError(error))
             setError(error.message)
