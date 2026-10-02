@@ -135,7 +135,7 @@
   list-style: none;
 }
 
-.orders-table-products li + li {
+.orders-table-products li+li {
   margin-top: 3px;
 }
 
@@ -201,6 +201,7 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
+
   .orders-table-row,
   .orders-table-arrow {
     transition: none;
@@ -810,6 +811,7 @@
     gap: 12px;
   }
 }
+
 /* =========================================================
    MODAL DETALLE DE ORDEN
 ========================================================= */
@@ -827,6 +829,13 @@
   margin: 0 0 10px;
   font-size: 16px;
   color: #1f2937;
+}
+
+/* =========================================================
+   MODAL CREAR DE ORDEN
+========================================================= */
+.varaint-text {
+  text-transform: capitalize;
 }
 
 @keyframes order-detail-modal-in {

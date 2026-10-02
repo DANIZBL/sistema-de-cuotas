@@ -3,9 +3,7 @@ import { useEffect, useMemo, useState } from "react";
 import { getOrders } from "../../services/orderService";
 
 import Modal from "../../components/ui/Modal";
-import OrderInfo, {
-  getOrderStatus,
-} from "../../components/installments/OrderInfo";
+import OrderInfo from "../../components/installments/OrderInfo";
 import InstallmentTable from "../../components/installments/InstallmentTable";
 
 import type {
@@ -18,6 +16,7 @@ import BaseTable from "../../components/BaseTable";
 import { LoadersTexts } from "../../types/enums";
 import loadElements from "../../components/categories/services/loadCategories";
 import TableOrders from "./TableOrders";
+import CreateOrder from "../../components/createOrder/CreateOrder";
 
 export default function Ordenes() {
   const [orders, setOrders] = useState<Order[]>([]);
@@ -63,8 +62,16 @@ export default function Ordenes() {
     setSelectedOrder(order);
   }
 
-  function handleCloseModal() {
-    setSelectedOrder(null);
+  async function handleOrderCreated() {
+    setShowCreateModal(false);
+
+    // Recarga sin el loader de la tabla para que no parpadee
+    try {
+      const data = await getOrders();
+      setOrders(data);
+    } catch (error) {
+      console.error("Error al recargar las órdenes:", error);
+    }
   }
 
   return (
@@ -94,19 +101,17 @@ export default function Ordenes() {
       {showCreateModal && (
         <Modal
           title={`Crear orden`}
-          onClose={handleCloseModal}
+          onClose={() => setShowCreateModal(false)}
           className="order-detail-modal"
         >
-          <form>
-
-          </form>
+          <CreateOrder onCreated={handleOrderCreated} />
         </Modal>
       )}
 
       {selectedOrder && (
         <Modal
           title={`Orden #${selectedOrder.orderNumber || selectedOrder.id.slice(0, 8)}`}
-          onClose={handleCloseModal}
+          onClose={() => setSelectedOrder(null)}
           className="order-detail-modal"
         >
           <OrderInfo order={selectedOrder} />

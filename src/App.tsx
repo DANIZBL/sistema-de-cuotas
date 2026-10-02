@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import Sidebar from "./components/layout/Sidebar";
 import Header from "./components/layout/Header";
@@ -14,6 +14,7 @@ import Categories from "./pages/Categories";
 import Ordenes from "./pages/Cuotas/Ordenes";
 import { ProductsContext } from "./lib/contexts";
 import { User } from "./types/auth";
+import { getProducts } from "./components/products/services/productService";
 
 function App() {
   const [user, setUser] = useState(() => {
@@ -41,6 +42,31 @@ function App() {
     setUser(loggedUser);
     navigate("/productos")
   }
+
+  useEffect(() => {
+    if (user) {
+      localStorage.setItem("adminUser", JSON.stringify(user));
+    } else {
+      localStorage.removeItem("adminUser");
+    }
+  }, [user]);
+
+  useEffect(() => {
+    if (pathname != "/") {
+      setSidebarOpen(false)
+    }
+  }, [pathname])
+
+  useEffect(() => {
+    (async () => {
+      try {
+        const response = await getProducts();;
+        setProducts(response);
+      } catch (error) {
+        console.error("Error al cargar productos:", error);
+      }
+    })();
+  }, []);
 
   return (
     <div className="admin-layout">

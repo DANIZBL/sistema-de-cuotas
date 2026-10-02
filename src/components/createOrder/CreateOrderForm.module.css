@@ -1,0 +1,513 @@
+/* Mismo estilo que los forms de crear producto (ProductForm.css) */
+
+.form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.section {
+    padding-bottom: 20px;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.section:last-of-type {
+    border-bottom: 0;
+    padding-bottom: 0;
+}
+
+.sectionTitle {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 15px;
+    margin-bottom: 18px;
+}
+
+.sectionTitle h3 {
+    margin: 0;
+    color: #111827;
+    font-size: 14px;
+}
+
+.sectionTitle p {
+    margin: 4px 0 0;
+    color: #9ca3af;
+    font-size: 11px;
+    line-height: 1.4;
+}
+
+/* BOTÓN AGREGAR */
+
+.addButton {
+    flex-shrink: 0;
+    padding: 8px 12px;
+    border: 1px solid #d1d5db;
+    border-radius: 7px;
+    background: white;
+    color: #374151;
+    font-size: 11px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s, border-color 0.2s;
+}
+
+.addButton:hover:not(:disabled) {
+    background: #f9fafb;
+    border-color: #9ca3af;
+}
+
+.addButton:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+/* Mismo estilo que "Eliminar" de las variantes en ProductForm */
+
+.deleteButton {
+    flex-shrink: 0;
+    padding: 7px 12px;
+    border: 1px solid #fecaca;
+    border-radius: 7px;
+    background: white;
+    color: #b91c1c;
+    font-size: 11px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s, border-color 0.2s, color 0.2s, transform 0.1s;
+}
+
+.deleteButton:hover:not(:disabled) {
+    background: #fef2f2;
+    border-color: #fca5a5;
+    color: #991b1b;
+}
+
+.deleteButton:active:not(:disabled) {
+    transform: scale(0.97);
+}
+
+.deleteButton:focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.25);
+}
+
+.deleteButton:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+/* PRODUCTOS AGREGADOS */
+
+.productList {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.productItem {
+    padding: 17px;
+    border: 1px solid #e5e7eb;
+    border-radius: 10px;
+    background: #fafafa;
+}
+
+.productHeader {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 15px;
+    padding-bottom: 15px;
+    margin-bottom: 15px;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.productHeader strong {
+    display: block;
+    color: #111827;
+    font-size: 13px;
+    font-weight: 700;
+}
+
+.productHeader small {
+    display: block;
+    margin-top: 3px;
+    color: #9ca3af;
+    font-size: 10px;
+}
+
+.productGrid {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1fr;
+    gap: 12px;
+}
+
+/* CAMPOS */
+
+.formGroup {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+}
+
+.formGroup label {
+    color: #374151;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.formGroup small {
+    color: #9ca3af;
+    font-size: 10px;
+    line-height: 1.5;
+}
+
+.formGroup input,
+.formGroup select,
+.readonlyField {
+    width: 100%;
+    height: 42px;
+    box-sizing: border-box;
+    padding: 0 12px;
+    border: 1px solid #d1d5db;
+    border-radius: 7px;
+    outline: none;
+    background: white;
+    color: #2771d3;
+    font-size: 13px;
+    transition: border-color 0.2s;
+}
+
+.formGroup select {
+    cursor: pointer;
+}
+
+.formGroup input::placeholder {
+    color: #9ca3af;
+}
+
+.formGroup input:focus,
+.formGroup select:focus {
+    border-color: #2771d3;
+}
+
+.formGrid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px 12px;
+}
+
+/* AVISO */
+
+.notice {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 14px;
+    border: 1px solid #bfdbfe;
+    border-radius: 8px;
+    background: #eff6ff;
+    color: #1e40af;
+    font-size: 12px;
+    font-weight: 500;
+}
+
+.notice span {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: #2771d3;
+    color: white;
+    font-size: 11px;
+    font-weight: 700;
+}
+
+.readonlyField {
+    display: flex;
+    align-items: center;
+    background: #f9fafb;
+    color: #374151;
+}
+
+/* ESTADO VACÍO */
+
+.empty {
+    padding: 24px;
+    border: 1px dashed #d1d5db;
+    border-radius: 10px;
+    color: #9ca3af;
+    font-size: 12px;
+    text-align: center;
+}
+
+/* MODAL SELECTOR DE PRODUCTOS */
+
+:global(.modal).productsModal {
+    max-width: 520px;
+}
+
+/* El body ocupa todo el alto del modal y solo scrollea la lista */
+:global(.modal).productsModal :global(.modal-body) {
+    flex: 1;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.picker {
+    flex: 1;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.pickerSearch {
+    flex-shrink: 0;
+    width: 100%;
+    height: 42px;
+    box-sizing: border-box;
+    padding: 0 12px 0 36px;
+    border: 1px solid #d1d5db;
+    border-radius: 7px;
+    outline: none;
+    background: white url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%239ca3af' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='11' cy='11' r='8'/%3E%3Cline x1='21' y1='21' x2='16.65' y2='16.65'/%3E%3C/svg%3E") no-repeat 12px center;
+    color: #2771d3;
+    font-size: 13px;
+    transition: border-color 0.2s;
+}
+
+.pickerSearch::placeholder {
+    color: #9ca3af;
+}
+
+.pickerSearch:focus {
+    border-color: #2771d3;
+}
+
+.pickerList {
+    flex: 1;
+    min-height: 0;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    border: 1px solid #e5e7eb;
+    border-radius: 10px;
+    overflow-y: auto;
+}
+
+.pickerItem {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 15px;
+    padding: 12px 15px;
+    transition: background 0.2s;
+}
+
+.pickerItem+.pickerItem {
+    border-top: 1px solid #f0f0f0;
+}
+
+.pickerItem:hover {
+    background: #fafafa;
+}
+
+.pickerItem strong {
+    display: block;
+    color: #111827;
+    font-size: 13px;
+}
+
+.pickerItem small {
+    display: block;
+    margin-top: 3px;
+    color: #9ca3af;
+    font-size: 11px;
+}
+
+@media (max-width: 650px) {
+    .productGrid,
+    .formGrid {
+        grid-template-columns: 1fr;
+    }
+
+    .sectionTitle {
+        flex-direction: column;
+    }
+}
+/* SUBTOTAL POR PRODUCTO */
+
+.subtotalField {
+    font-weight: 700;
+    color: #111827;
+}
+
+/* RESUMEN DE LA ORDEN */
+
+.summary {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 16px 18px;
+    border: 1px solid #bfdbfe;
+    border-radius: 10px;
+    background: #eff6ff;
+}
+
+.summaryRow {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 15px;
+}
+
+.summaryRow span {
+    color: #374151;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.summaryRow strong {
+    color: #111827;
+    font-size: 14px;
+}
+
+.summaryRow .summaryTotal {
+    color: #2771d3;
+    font-size: 22px;
+    font-weight: 800;
+    font-variant-numeric: tabular-nums;
+}
+
+.summaryRow .summaryInstallment {
+    font-size: 16px;
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+}
+
+.summaryDivider {
+    height: 1px;
+    background: #bfdbfe;
+}
+
+.summaryHint {
+    color: #6b7280;
+    font-size: 11px;
+}
+
+/* BOTÓN REGISTRAR ORDEN (mismo color que .submit-button de ProductForm) */
+
+.formActions {
+    display: flex;
+    justify-content: flex-end;
+    padding-top: 5px;
+}
+
+.submitButton {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 9px;
+    min-width: 170px;
+    height: 42px;
+    padding: 0 20px;
+    border: 0;
+    border-radius: 7px;
+    background: #2771d3;
+    color: white;
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+    box-shadow: 0 2px 6px rgba(39, 113, 211, 0.25);
+    transition: background 0.2s, box-shadow 0.2s, transform 0.1s;
+}
+
+.submitButton:hover:not(:disabled) {
+    background: #1d5fb8;
+    box-shadow: 0 4px 12px rgba(39, 113, 211, 0.35);
+}
+
+.submitButton:active:not(:disabled) {
+    transform: scale(0.98);
+}
+
+.submitButton:focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(39, 113, 211, 0.35);
+}
+
+.submitButton:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    box-shadow: none;
+}
+
+/* Mientras carga: spinner + barra que recorre el botón */
+
+.submitButton:has(.spinner) {
+    position: relative;
+    overflow: hidden;
+    opacity: 0.85;
+    cursor: progress;
+}
+
+.submitButton:has(.spinner)::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.25), transparent);
+    animation: submitShimmer 1.2s ease-in-out infinite;
+}
+
+.spinner {
+    width: 14px;
+    height: 14px;
+    flex-shrink: 0;
+    border: 2px solid rgba(255, 255, 255, 0.4);
+    border-top-color: white;
+    border-radius: 50%;
+    animation: submitSpin 0.8s linear infinite;
+}
+
+.formError {
+    padding: 12px 14px;
+    border: 1px solid #fecaca;
+    border-radius: 8px;
+    background: #fef2f2;
+    color: #991b1b;
+    font-size: 12px;
+}
+
+@keyframes submitSpin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes submitShimmer {
+    from {
+        transform: translateX(-100%);
+    }
+
+    to {
+        transform: translateX(100%);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .submitButton:has(.spinner)::after {
+        animation: none;
+    }
+}
+
+@media (max-width: 650px) {
+    .submitButton {
+        width: 100%;
+    }
+}

@@ -8,7 +8,16 @@ const openModals = [];
 
 let previousBodyOverflow = "";
 
-function Modal({ title, children, onClose, className = "" }) {
+/**
+ * @param {{
+ *   title: import("react").ReactNode,
+ *   children?: import("react").ReactNode,
+ *   onClose: () => void,
+ *   className?: string,
+ *   style?: import("react").CSSProperties
+ * }} props
+ */
+function Modal({ title, children, onClose, className = "", style }) {
   const onCloseRef = useRef(onClose);
 
   useEffect(() => {
@@ -63,7 +72,7 @@ function Modal({ title, children, onClose, className = "" }) {
         }
       }}
     >
-      <div className={`modal ${className}`}>
+      <div className={`modal ${className}`} style={style}>
         <div className="modal-header">
           <h2>{title}</h2>
 
